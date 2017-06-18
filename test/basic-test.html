@@ -1,0 +1,157 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <script src="../../iron-test-helpers/test-helpers.js"></script>
+    <script src="../../iron-test-helpers/mock-interactions.js"></script>
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="../raw-payload-editor.html">
+  </head>
+  <body>
+
+    <test-fixture id="basic">
+      <template>
+        <raw-payload-editor></raw-payload-editor>
+      </template>
+    </test-fixture>
+
+    <test-fixture id="encode">
+      <template>
+        <raw-payload-editor content-type="application/x-www-form-urlencoded"></raw-payload-editor>
+      </template>
+    </test-fixture>
+
+    <script>
+    function fire(name, detail, node) {
+      var event = new CustomEvent(name, {
+        bubbles: true,
+        composed: true,
+        detail: detail
+      });
+      (node || document).dispatchEvent(event);
+      return event;
+    }
+    /* global suite, test, fixture, assert, sinon */
+    suite('basic', function() {
+      var element;
+
+      setup(function() {
+        element = fixture('basic');
+      });
+
+      test('contentType is undefined', function() {
+        assert.isUndefined(element.contentType);
+      });
+
+      test('encodeEnabled is false', function() {
+        assert.isFalse(element.encodeEnabled);
+      });
+
+      test('Handling content-type-changed', function() {
+        fire('content-type-changed', {
+          value: 'text/plain'
+        });
+        assert.equal(element.contentType, 'text/plain');
+      });
+
+      test('Content type changes editor mode', function() {
+        element.contentType = 'application/xml';
+        assert.equal(element.$$('code-mirror').mode, element.contentType);
+      });
+
+      test('Content type with charset changes editor mode', function() {
+        element.contentType = 'application/xml; charset="utf-8"';
+        assert.equal(element.$$('code-mirror').mode, 'application/xml');
+      });
+
+      test('The encodeEnabled is true for application/x-www-form-urlencoded', function() {
+        element.contentType = 'application/x-www-form-urlencoded';
+        assert.isTrue(element.encodeEnabled);
+      });
+
+      test('Fires payload-value-changed when editor value change', function() {
+        var spy = sinon.stub();
+        element.addEventListener('payload-value-changed', spy);
+        // emulates event
+        element._editorValueChanged({
+          stopPropagation: function() {},
+          detail: {
+            value: 'x-test'
+          }
+        });
+        assert.isTrue(spy.calledOnce);
+      });
+
+      test('Do not fires payload-value-changed when value change', function() {
+        var spy = sinon.stub();
+        element.addEventListener('payload-value-changed', spy);
+        element.value = 'test';
+        assert.isFalse(spy.called);
+      });
+
+      test('Code Mirror value changes after value change', function() {
+        element.value = 'test';
+        var cm = Polymer.dom(element.root).querySelector('code-mirror');
+        assert.equal(cm.value, element.value);
+      });
+
+
+    });
+
+    suite('encoder-decoder', function() {
+      var element;
+      const decodedValue = 'x test=x value';
+      const encodedValue = 'x+test=x+value';
+
+      setup(function() {
+        element = fixture('encode');
+      });
+
+      test('Encodes parameters', function() {
+        element.value = decodedValue;
+        element.encodeValue();
+        assert.equal(element.value, encodedValue);
+      });
+
+      test('Encodes parameters fires payload-value-changed event', function() {
+        var spy = sinon.stub();
+        element.addEventListener('payload-value-changed', spy);
+        element.value = decodedValue;
+
+        element.encodeValue();
+        assert.isTrue(spy.calledOnce);
+      });
+
+      test('Decodes parameters', function() {
+        element.value = encodedValue;
+        element.decodeValue();
+        assert.equal(element.value, decodedValue);
+      });
+
+      test('Decodes parameters fires payload-value-changed event', function() {
+        var spy = sinon.stub();
+        element.addEventListener('payload-value-changed', spy);
+        element.value = encodedValue;
+
+        element.decodeValue();
+        assert.isTrue(spy.calledOnce);
+      });
+    });
+    </script>
+
+  </body>
+</html>
