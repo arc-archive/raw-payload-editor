@@ -17,11 +17,17 @@ the License.
 <link rel="import" href="../request-payload-editor-behavior/request-payload-editor-behavior.html">
 <link rel="import" href="../paper-tooltip/paper-tooltip.html">
 <!--
-`<raw-payload-editor>` A raw payload input editor based on CodeMirror
+`<raw-payload-editor>` A raw payload input editor based on CodeMirror.
+
+The element additionally shows Encode / Decode buttons if current content type value contains
+"x-www-form-urlencoded".
+
+The element listens for `content-type-changed` custom event and updates the `contentType` property
+automatically. This event is commonly used in ARC elements.
 
 ### Example
 ```
-<raw-payload-editor></raw-payload-editor>
+<raw-payload-editor content-type="application/json"></raw-payload-editor>
 ```
 
 ### Styling
@@ -41,11 +47,12 @@ Custom property | Description | Default
     <style>
     :host {
       display: block;
+      @apply(--raw-payload-editor);
     }
 
     .encoder-buttons {
       margin: 8px 0;
-      @apply(--form-data-editor-encode-buttons);
+      @apply(--raw-payload-editor-encode-buttons);
     }
 
     *[hidden] {
