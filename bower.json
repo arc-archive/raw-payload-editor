@@ -1,7 +1,7 @@
 {
   "name": "raw-payload-editor",
   "description": "A raw payload input editor based on CodeMirror",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "license": "Apache-2.0 OR CC-BY-4.0",
   "authors": [
     "The Advanced REST client authors <arc@mulesoft.com>"
@@ -23,6 +23,7 @@
     "code-mirror": "advanced-rest-client/code-mirror#^1.0.18",
     "headers-editor-code-mirror": "advanced-rest-client/headers-editor-code-mirror#^0.1.0",
     "paper-button": "PolymerElements/paper-button#^1.0.0",
+    "paper-tooltip": "PolymerElements/paper-tooltip#^1.1.4",
     "request-payload-editor-behavior": "advanced-rest-client/request-payload-editor-behavior#^0.1.1"
   },
   "devDependencies": {
