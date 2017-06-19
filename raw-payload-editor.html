@@ -112,6 +112,8 @@ Custom property | Description | Default
 
     __isOpenedChanged: function(isOpened) {
       if (isOpened) {
+        this.__editorValueChange = false;
+        this._valueChanged(this.value);
         this.$$('code-mirror').editor.refresh();
       }
     },
@@ -153,7 +155,6 @@ Custom property | Description | Default
      * If the element is opened then it will fire change event.
      */
     _valueChanged: function(value) {
-      console.log(value);
       if (this._isOpened) {
         if (this.__editorValueChange) {
           this.fire('payload-value-changed', {
