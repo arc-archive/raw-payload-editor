@@ -1,3 +1,13 @@
+<a name="0.1.2"></a>
+## [0.1.2](https://github.com/advanced-rest-client/raw-payload-editor/compare/0.1.1...v0.1.2) (2017-06-19)
+
+
+### Fix
+
+* Fixed an issue when after opened has changed the value wasn't propagated to CM ([cd82f73d33da69720069cc792974a7ae515699e6](https://github.com/advanced-rest-client/raw-payload-editor/commit/cd82f73d33da69720069cc792974a7ae515699e6))
+
+
+
 <a name="0.1.1"></a>
 ## 0.1.1 (2017-06-18)
 
