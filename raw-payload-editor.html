@@ -16,6 +16,7 @@ the License.
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../request-payload-editor-behavior/request-payload-editor-behavior.html">
 <link rel="import" href="../paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <!--
 `<raw-payload-editor>` A raw payload input editor based on CodeMirror.
 
@@ -71,7 +72,10 @@ Custom property | Description | Default
   Polymer({
     is: 'raw-payload-editor',
 
-    behaviors: [ArcBehaviors.RequestPayloadEditorBehavior],
+    behaviors: [
+      ArcBehaviors.RequestPayloadEditorBehavior,
+      Polymer.IronResizableBehavior
+    ],
 
     /**
      * Event fire when the value of the editor change.
@@ -102,6 +106,10 @@ Custom property | Description | Default
       '__isOpenedChanged(_isOpened)'
     ],
 
+    listeners: {
+      'iron-resize': 'refresh'
+    },
+
     attached: function() {
       this.listen(window, 'content-type-changed', '_contentTypeHandler');
     },
@@ -114,9 +122,24 @@ Custom property | Description | Default
       if (isOpened) {
         this.__editorValueChange = false;
         this._valueChanged(this.value);
-        this.$$('code-mirror').editor.refresh();
+        this.refresh();
       }
     },
+    /**
+     * Forces render code-mirror content.
+     * Should be used to when the element becomes visible after being hidden.
+     */
+    refresh: function() {
+      if (!this._isOpened) {
+        return;
+      }
+      var elm = this.$$('code-mirror');
+      if (!elm) {
+        return; // DOM not ready
+      }
+      elm.editor.refresh();
+    },
+
     /**
      * Changes CodeMirror mode when the content type value is updated.
      */
