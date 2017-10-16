@@ -66,7 +66,7 @@ Custom property | Description | Default
       <paper-tooltip animation-delay="200" for="encodePayload">Encodes payload to x-www-form-urlencoded data</paper-tooltip>
       <paper-tooltip animation-delay="200" for="decodePayload">Decodes payload to human readable form</paper-tooltip>
     </div>
-    <code-mirror mode="application/json" on-value-changed="_editorValueChanged"></code-mirror>
+    <code-mirror mode="application/json" on-value-changed="_editorValueChanged" on-paste="_onPaste"></code-mirror>
   </template>
   <script>
   Polymer({
@@ -201,6 +201,19 @@ Custom property | Description | Default
       this.__editorValueChange = true;
       this.set('value', e.detail.value);
       this.__editorValueChange = false;
+    },
+
+    _onPaste: function(e) {
+      if (this.contentType !== 'application/json') {
+        return;
+      }
+      e.preventDefault();
+      var data = e.clipboardData.getData('text/plain');
+      try {
+        data = JSON.parse(data);
+        data = JSON.stringify(data, null, 2);
+      } catch (e) {}
+      this.set('value', data);
     }
   });
   </script>
