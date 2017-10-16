@@ -1,3 +1,13 @@
+<a name="0.1.5"></a>
+## [0.1.5](https://github.com/advanced-rest-client/raw-payload-editor/compare/0.1.4...0.1.5) (2017-10-16)
+
+
+### Fix
+
+* Fixes https://github.com/jarrodek/ChromeRestClient/issues/1059 ([a008f743c24e9014389059ab27d2695587c73706](https://github.com/advanced-rest-client/raw-payload-editor/commit/a008f743c24e9014389059ab27d2695587c73706))
+
+
+
 <a name="0.1.4"></a>
 ## [0.1.4](https://github.com/advanced-rest-client/raw-payload-editor/compare/0.1.2...0.1.4) (2017-10-16)
 
