@@ -207,13 +207,48 @@ Custom property | Description | Default
       if (this.contentType !== 'application/json') {
         return;
       }
-      e.preventDefault();
+      var len;
+      if (this.value) {
+        len = this.value.length;
+      }
+      if (this._hasSelection(len)) {
+        return;
+      }
+
       var data = e.clipboardData.getData('text/plain');
       try {
         data = JSON.parse(data);
         data = JSON.stringify(data, null, 2);
+        e.preventDefault();
+        this.set('value', data);
       } catch (e) {}
-      this.set('value', data);
+    },
+
+    _hasSelection: function(inputSize) {
+      var el = document.activeElement;
+      var start = 0;
+      var end = 0;
+      if (el) {
+        if (typeof el.selectionStart === 'number') {
+          start = el.selectionStart;
+        }
+        if (typeof el.selectionEnd === 'number') {
+          end = el.selectionEnd;
+        }
+      }
+      if (start === 0 && end === 0) {
+        var selection = window.getSelection();
+        if (selection.rangeCount === 0) {
+          return false;
+        }
+        var range = selection.getRangeAt(0);
+        start = range.startOffset;
+        end = range.endOffset;
+      }
+      if (start === 0 && end === inputSize) {
+        return false;
+      }
+      return start !== end;
     }
   });
   </script>
