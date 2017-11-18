@@ -1,19 +1,14 @@
 language: node_js
-sudo: required
-dist: trusty
 node_js: stable
 before_script:
-- npm install --silent bower polymer-cli
-- "./node_modules/.bin/bower install --silent"
+- bower install --silent
 addons:
   sauce_connect: true
 script:
 - npm run lint
-- ./node_modules/.bin/polymer test --plugin sauce --job-name "raw-payload-editor:${TRAVIS_BRANCH}"
-  --build-number=${TRAVIS_BUILD_NUMBER}
+- polymer test --plugin sauce --job-name "raw-payload-editor:${TRAVIS_BRANCH}" --build-number=${TRAVIS_BUILD_NUMBER}
 cache:
   directories:
-  - bower_components
   - node_modules
 branches:
   only:
