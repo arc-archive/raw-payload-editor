@@ -1,6 +1,6 @@
 {
   "name": "raw-payload-editor",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "license": "Apache-2.0 OR CC-BY-4.0",
   "description": "A raw payload input editor based on CodeMirror",
   "devDependencies": {
