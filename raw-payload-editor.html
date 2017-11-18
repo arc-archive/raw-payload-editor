@@ -202,7 +202,11 @@ Custom property | Description | Default
       this.set('value', e.detail.value);
       this.__editorValueChange = false;
     },
-
+    /**
+     * Formats JSON data on paste.
+     * It only formats the input if no selection is applied, whole value
+     * is selcted or input is empty.
+     */
     _onPaste: function(e) {
       if (this.contentType !== 'application/json') {
         return;
@@ -211,11 +215,11 @@ Custom property | Description | Default
       if (this.value) {
         len = this.value.length;
       }
-      if (this._hasSelection(len)) {
+      if (this._cancelPaste(len)) {
         return;
       }
 
-      var data = e.clipboardData.getData('text/plain');
+      var data = e.clipboardData.getData('text');
       try {
         data = JSON.parse(data);
         data = JSON.stringify(data, null, 2);
@@ -223,8 +227,16 @@ Custom property | Description | Default
         this.set('value', data);
       } catch (e) {}
     },
-
-    _hasSelection: function(inputSize) {
+    /**
+     * Tests if text formatting on paste is allowed
+     *
+     * @param {Number} inputSize Size of current value
+     * @return {Boolean} True to disallow altering the value on paste.
+     */
+    _cancelPaste: function(inputSize) {
+      if (!inputSize) {
+        return false;
+      }
       var el = document.activeElement;
       var start = 0;
       var end = 0;
@@ -248,7 +260,7 @@ Custom property | Description | Default
       if (start === 0 && end === inputSize) {
         return false;
       }
-      return start !== end;
+      return true;
     }
   });
   </script>
