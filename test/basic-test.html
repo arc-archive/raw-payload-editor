@@ -17,8 +17,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <script src="../../web-component-tester/browser.js"></script>
     <script src="../../iron-test-helpers/test-helpers.js"></script>
     <script src="../../iron-test-helpers/mock-interactions.js"></script>
-
-    <!-- Step 1: import the element to test -->
     <link rel="import" href="../raw-payload-editor.html">
   </head>
   <body>
@@ -108,8 +106,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var cm = Polymer.dom(element.root).querySelector('code-mirror');
         assert.equal(cm.value, element.value);
       });
-
-
     });
 
     suite('encoder-decoder', function() {
