@@ -17,6 +17,7 @@ the License.
 <link rel="import" href="../request-payload-editor-behavior/request-payload-editor-behavior.html">
 <link rel="import" href="../paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
+<link rel="import" href="../code-mirror-linter/code-mirror-linter-json.html">
 <!--
 `<raw-payload-editor>` A raw payload input editor based on CodeMirror.
 
@@ -66,9 +67,10 @@ Custom property | Description | Default
       <paper-tooltip animation-delay="200" for="encodePayload">Encodes payload to x-www-form-urlencoded data</paper-tooltip>
       <paper-tooltip animation-delay="200" for="decodePayload">Decodes payload to human readable form</paper-tooltip>
     </div>
-    <code-mirror mode="application/json" on-value-changed="_editorValueChanged" on-paste="_onPaste"></code-mirror>
+    <code-mirror mode="application/json" on-value-changed="_editorValueChanged" on-paste="_onPaste" lint="[[_lintObject]]" gutters="[[_cmGutters]]" include-custom-styles="[[_customStylesList]]"></code-mirror>
   </template>
   <script>
+  /* global CodeMirror */
   Polymer({
     is: 'raw-payload-editor',
 
@@ -98,6 +100,19 @@ Custom property | Description | Default
         type: Boolean,
         computed: '_computeEncodeEnabled(contentType)',
         value: false
+      },
+      _cmGutters: {
+        type: Array,
+        value: ['CodeMirror-lint-markers']
+      },
+      _lintObject: {
+        type: Object,
+        value: function() {
+          return false;
+        }
+      },
+      _customStylesList: {
+        type: Array
       }
     },
 
@@ -144,6 +159,7 @@ Custom property | Description | Default
      * Changes CodeMirror mode when the content type value is updated.
      */
     _onContentTypeChanged: function(ct) {
+      this._setupLinter(ct);
       if (!ct) {
         return;
       }
@@ -261,6 +277,20 @@ Custom property | Description | Default
         return false;
       }
       return true;
+    },
+
+    _setupLinter: function(ct) {
+      if (!ct || (ct.indexOf && ct.indexOf('/json') === -1)) {
+        this.set('_lintObject', false);
+        this.set('_customStylesList', undefined);
+      } else {
+        this.set('_lintObject', CodeMirror.lint.json);
+        this.set('_customStylesList', ['code-mirror-lint']);
+      }
+      var editor = this.$$('code-mirror').editor;
+      if (editor) {
+        editor.refresh();
+      }
     }
   });
   </script>

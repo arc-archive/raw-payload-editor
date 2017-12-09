@@ -1,3 +1,13 @@
+<a name="0.1.11"></a>
+## [0.1.11](https://github.com/advanced-rest-client/raw-payload-editor/compare/0.1.10...0.1.11) (2017-12-09)
+
+
+### New
+
+* Adding linter to JSON content type. ([9a63ce17aaa42560ee2faef9360e415d6afe2c8a](https://github.com/advanced-rest-client/raw-payload-editor/commit/9a63ce17aaa42560ee2faef9360e415d6afe2c8a))
+
+
+
 <a name="0.1.10"></a>
 ## [0.1.10](https://github.com/advanced-rest-client/raw-payload-editor/compare/0.1.9...0.1.10) (2017-11-18)
 
