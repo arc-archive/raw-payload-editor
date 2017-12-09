@@ -25,7 +25,8 @@
     "paper-button": "PolymerElements/paper-button#^1.0.0",
     "paper-tooltip": "PolymerElements/paper-tooltip#^1.1.4",
     "request-payload-editor-behavior": "advanced-rest-client/request-payload-editor-behavior#^0.1.1",
-    "iron-resizable-behavior": "PolymerElements/iron-resizable-behavior#<2"
+    "iron-resizable-behavior": "PolymerElements/iron-resizable-behavior#<2",
+    "code-mirror-linter": "advanced-rest-client/code-mirror-linter#^0.1.1"
   },
   "devDependencies": {
     "iron-component-page": "polymerelements/iron-component-page#1.0.0",
@@ -45,9 +46,5 @@
     "bower_components",
     "test",
     "tasks"
-  ],
-  "resolutions": {
-    "mocha": "^3.1.2",
-    "test-fixture": "^3.0.0-rc.1"
-  }
+  ]
 }
