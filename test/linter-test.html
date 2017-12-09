@@ -1,0 +1,80 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <script src="../../iron-test-helpers/test-helpers.js"></script>
+    <script src="../../iron-test-helpers/mock-interactions.js"></script>
+    <link rel="import" href="../raw-payload-editor.html">
+  </head>
+  <body>
+
+    <test-fixture id="basic">
+      <template>
+        <raw-payload-editor></raw-payload-editor>
+      </template>
+    </test-fixture>
+
+    <script>
+    /* global fixture, assert */
+    suite('basic', function() {
+      var element;
+
+      setup(function() {
+        element = fixture('basic');
+      });
+
+      test('_cmGutters is set', function() {
+        assert.typeOf(element._cmGutters, 'array');
+        assert.lengthOf(element._cmGutters, 1);
+      });
+
+      test('_customStylesList is undefined by default', function() {
+        assert.isUndefined(element._customStylesList);
+      });
+
+      test('_lintObject is false by default', function() {
+        assert.isFalse(element._lintObject);
+      });
+
+      test('Setting JSON content type sets _lintObject', function() {
+        element.contentType = 'application/json';
+        assert.typeOf(element._lintObject, 'function');
+      });
+
+      test('Setting JSON content type sets _customStylesList', function() {
+        element.contentType = 'application/json';
+        assert.typeOf(element._customStylesList, 'array');
+        assert.lengthOf(element._customStylesList, 1);
+      });
+
+      test('Clearing content type removes _customStylesList', function() {
+        element.contentType = 'application/json';
+        assert.typeOf(element._customStylesList, 'array');
+        element.contentType = undefined;
+        assert.isUndefined(element._customStylesList);
+      });
+
+      test('Clearing content type removes _customStylesList', function() {
+        element.contentType = 'application/json';
+        assert.typeOf(element._lintObject, 'function');
+        element.contentType = undefined;
+        assert.isFalse(element._lintObject);
+      });
+    });
+    </script>
+
+  </body>
+</html>
