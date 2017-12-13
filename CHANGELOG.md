@@ -1,3 +1,13 @@
+<a name="0.1.14"></a>
+## [0.1.14](https://github.com/advanced-rest-client/raw-payload-editor/compare/0.1.13...0.1.14) (2017-12-13)
+
+
+### Fix
+
+* Fixed version number of the paper-toast element ([d7c0c143600ff6094c5b73e2b525342c9c916c9f](https://github.com/advanced-rest-client/raw-payload-editor/commit/d7c0c143600ff6094c5b73e2b525342c9c916c9f))
+
+
+
 <a name="0.1.13"></a>
 ## [0.1.13](https://github.com/advanced-rest-client/raw-payload-editor/compare/0.1.12...0.1.13) (2017-12-13)
 
