@@ -43,7 +43,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       (node || document).dispatchEvent(event);
       return event;
     }
-    /* global suite, test, fixture, assert, sinon */
+    /* global fixture, assert, sinon, flush, MockInteractions */
     suite('basic', function() {
       var element;
 
@@ -110,11 +110,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     suite('encoder-decoder', function() {
       var element;
-      const decodedValue = 'x test=x value';
-      const encodedValue = 'x+test=x+value';
+      var decodedValue = 'x test=x value';
+      var encodedValue = 'x+test=x+value';
 
       setup(function() {
         element = fixture('encode');
+        element.contentType = 'application/x-www-form-urlencoded';
+      });
+
+      test('Action controls are rendered', function(done) {
+        flush(function() {
+          var container = element.$$('.action-buttons[data-type="form"]');
+          assert.ok(container);
+          done();
+        });
       });
 
       test('Encodes parameters', function() {
@@ -145,6 +154,46 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         element.decodeValue();
         assert.isTrue(spy.calledOnce);
+      });
+    });
+
+    suite('JSON tranformer', function() {
+      var element;
+      setup(function() {
+        element = fixture('encode');
+        element.contentType = 'application/json';
+      });
+
+      test('Formatting controls are rendered', function(done) {
+        flush(function() {
+          var container = element.$$('.action-buttons[data-type="json"]');
+          assert.ok(container);
+          done();
+        });
+      });
+
+      test('Formats JSON', function(done) {
+        var initialValue = '{"a":"b"}';
+        element.value = initialValue;
+        flush(function() {
+          var button = element.$$('[data-action="format-json"]');
+          MockInteractions.tap(button);
+          assert.typeOf(element.value, 'string');
+          assert.isAbove(element.value.length, 9);
+          done();
+        });
+      });
+
+      test('Minifies JSON', function(done) {
+        var initialValue = '{\t"a":\n"b"\n\t}';
+        var finalValue = '{"a":"b"}';
+        element.value = initialValue;
+        flush(function() {
+          var button = element.$$('[data-action="minify-json"]');
+          MockInteractions.tap(button);
+          assert.equal(element.value, finalValue);
+          done();
+        });
       });
     });
     </script>
