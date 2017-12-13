@@ -1,3 +1,17 @@
+<a name="0.1.12"></a>
+## [0.1.12](https://github.com/advanced-rest-client/raw-payload-editor/compare/0.1.11...0.1.12) (2017-12-13)
+
+
+### New
+
+* Adding JSON formatting tools ([c3e692bf553c7492e9a5f623ade444ed29385666](https://github.com/advanced-rest-client/raw-payload-editor/commit/c3e692bf553c7492e9a5f623ade444ed29385666))
+
+### Update
+
+* Updated tests configuration. ([e4f79767879d965b8d21bb7d98ad9a6a1473d1f5](https://github.com/advanced-rest-client/raw-payload-editor/commit/e4f79767879d965b8d21bb7d98ad9a6a1473d1f5))
+
+
+
 <a name="0.1.11"></a>
 ## [0.1.11](https://github.com/advanced-rest-client/raw-payload-editor/compare/0.1.10...0.1.11) (2017-12-09)
 

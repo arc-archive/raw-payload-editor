@@ -18,6 +18,8 @@ the License.
 <link rel="import" href="../paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../code-mirror-linter/code-mirror-linter-json.html">
+<link rel="import" href="../paper-toast/paper-toast.html">
+
 <!--
 `<raw-payload-editor>` A raw payload input editor based on CodeMirror.
 
@@ -49,25 +51,45 @@ Custom property | Description | Default
     <style>
     :host {
       display: block;
-      @apply(--raw-payload-editor);
+      @apply --raw-payload-editor;
     }
 
-    .encoder-buttons {
+    .action-buttons {
       margin: 8px 0;
-      @apply(--raw-payload-editor-encode-buttons);
+      @apply --raw-payload-editor-encode-buttons;
+      @apply --raw-payload-editor-action-buttons;
     }
 
     *[hidden] {
       display: none !important;
     }
     </style>
-    <div class="encoder-buttons" hidden$="[[!encodeEnabled]]">
-      <paper-button id="encodePayload" on-tap="encodeValue">encode payload</paper-button>
-      <paper-button id="decodePayload" on-tap="decodeValue">decode payload</paper-button>
-      <paper-tooltip animation-delay="200" for="encodePayload">Encodes payload to x-www-form-urlencoded data</paper-tooltip>
-      <paper-tooltip animation-delay="200" for="decodePayload">Decodes payload to human readable form</paper-tooltip>
-    </div>
+    <template is="dom-if" if="[[encodeEnabled]]">
+      <div class="action-buttons" data-type="form">
+        <span>
+          <paper-button on-tap="encodeValue">Encode payload</paper-button>
+          <paper-tooltip animation-delay="200">Encodes payload to x-www-form-urlencoded data</paper-tooltip>
+        </span>
+        <span>
+          <paper-button on-tap="decodeValue">Decode payload</paper-button>
+          <paper-tooltip animation-delay="200">Decodes payload to human readable form</paper-tooltip>
+        </span>
+      </div>
+    </template>
+    <template is="dom-if" if="[[isJson]]">
+      <div class="action-buttons" data-type="json">
+        <span>
+          <paper-button on-tap="formatValue" data-action="format-json">Format JSON</paper-button>
+          <paper-tooltip animation-delay="200">Formats JSON input.</paper-tooltip>
+        </span>
+        <span>
+          <paper-button on-tap="minifyValue" data-action="minify-json">Minify JSON</paper-button>
+          <paper-tooltip animation-delay="200">Removed whitespaces from the input</paper-tooltip>
+        </span>
+      </div>
+    </template>
     <code-mirror mode="application/json" on-value-changed="_editorValueChanged" on-paste="_onPaste" lint="[[_lintObject]]" gutters="[[_cmGutters]]" include-custom-styles="[[_customStylesList]]"></code-mirror>
+    <paper-toast id="invalidJsonToast">JSON value is invalid. Cannot parse value.</paper-toast>
   </template>
   <script>
   /* global CodeMirror */
@@ -99,6 +121,12 @@ Custom property | Description | Default
       encodeEnabled: {
         type: Boolean,
         computed: '_computeEncodeEnabled(contentType)',
+        value: false
+      },
+      // Computed value, true if `contentType` contains `/json`
+      isJson: {
+        type: Boolean,
+        computed: '_computeIsJson(contentType)',
         value: false
       },
       _cmGutters: {
@@ -170,10 +198,18 @@ Custom property | Description | Default
     },
     // Computes `encodeEnabled` based on content type.
     _computeEncodeEnabled: function(ct) {
+      return this.__computeIs(ct, 'x-www-form-urlencoded');
+    },
+
+    _computeIsJson: function(ct) {
+      return this.__computeIs(ct, '/json');
+    },
+
+    __computeIs: function(ct, needle) {
       if (!ct) {
         return false;
       }
-      if (ct.indexOf && ct.indexOf('x-www-form-urlencoded') !== -1) {
+      if (ct.indexOf && ct.indexOf(needle) !== -1) {
         return true;
       }
       return false;
@@ -181,8 +217,8 @@ Custom property | Description | Default
 
     // Handler for the `content-type-changed` event. Sets the `contentType` property.
     _contentTypeHandler: function(e) {
-      var event = Polymer.dom(e);
-      if (event.rootTarget === this) {
+      var ev = Polymer.dom(e);
+      if (ev.rootTarget === this) {
         return;
       }
       var ct = e.detail.value;
@@ -290,6 +326,34 @@ Custom property | Description | Default
       var editor = this.$$('code-mirror').editor;
       if (editor) {
         editor.refresh();
+      }
+    },
+    /**
+     * Formats current value as it is a JSON object.
+     */
+    formatValue: function() {
+      try {
+        var value = this.value;
+        value = JSON.parse(value);
+        value = JSON.stringify(value, null, 2);
+        this.set('value', value);
+      } catch (e) {
+        this.$.invalidJsonToast.opened = true;
+        console.log(e);
+      }
+    },
+    /**
+     * Minifies JSON value by removing whitespaces.
+     */
+    minifyValue: function() {
+      try {
+        var value = this.value;
+        value = JSON.parse(value);
+        value = JSON.stringify(value);
+        this.set('value', value);
+      } catch (e) {
+        this.$.invalidJsonToast.opened = true;
+        console.log(e);
       }
     }
   });
