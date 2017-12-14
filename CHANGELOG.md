@@ -1,3 +1,13 @@
+<a name="0.1.16"></a>
+## [0.1.16](https://github.com/advanced-rest-client/raw-payload-editor/compare/0.1.15...0.1.16) (2017-12-14)
+
+
+### New
+
+* Adding events target behavior ([499c124818eff55a89b16888d4fc2a2abcb852db](https://github.com/advanced-rest-client/raw-payload-editor/commit/499c124818eff55a89b16888d4fc2a2abcb852db))
+
+
+
 <a name="0.1.15"></a>
 ## [0.1.15](https://github.com/advanced-rest-client/raw-payload-editor/compare/0.1.14...0.1.15) (2017-12-13)
 
