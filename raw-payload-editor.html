@@ -19,7 +19,7 @@ the License.
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
 <link rel="import" href="../code-mirror-linter/code-mirror-linter-json.html">
 <link rel="import" href="../paper-toast/paper-toast.html">
-
+<link rel="import" href="../events-target-behavior/events-target-behavior.html">
 <!--
 `<raw-payload-editor>` A raw payload input editor based on CodeMirror.
 
@@ -98,7 +98,8 @@ Custom property | Description | Default
 
     behaviors: [
       ArcBehaviors.RequestPayloadEditorBehavior,
-      Polymer.IronResizableBehavior
+      Polymer.IronResizableBehavior,
+      ArcBehaviors.EventsTargetBehavior
     ],
 
     /**
@@ -153,12 +154,12 @@ Custom property | Description | Default
       'iron-resize': 'refresh'
     },
 
-    attached: function() {
-      this.listen(window, 'content-type-changed', '_contentTypeHandler');
+    _attachListeners: function(node) {
+      this.listen(node, 'content-type-changed', '_contentTypeHandler');
     },
 
-    detached: function() {
-      this.unlisten(window, 'content-type-changed', '_contentTypeHandler');
+    _detachListeners: function(node) {
+      this.unlisten(node, 'content-type-changed', '_contentTypeHandler');
     },
 
     __isOpenedChanged: function(isOpened) {
