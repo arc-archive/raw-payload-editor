@@ -27,7 +27,8 @@
     "request-payload-editor-behavior": "advanced-rest-client/request-payload-editor-behavior#^0.1.1",
     "iron-resizable-behavior": "PolymerElements/iron-resizable-behavior#<2",
     "code-mirror-linter": "advanced-rest-client/code-mirror-linter#^0.1.1",
-    "paper-toast": "PolymerElements/paper-toast#<2"
+    "paper-toast": "PolymerElements/paper-toast#<2",
+    "events-target-behavior": "advanced-rest-client/events-target-behavior#^0.1.1"
   },
   "devDependencies": {
     "iron-component-page": "polymerelements/iron-component-page#1.0.0",
