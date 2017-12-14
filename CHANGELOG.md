@@ -1,3 +1,9 @@
+<a name="0.1.17"></a>
+## [0.1.17](https://github.com/advanced-rest-client/raw-payload-editor/compare/0.1.16...0.1.17) (2017-12-14)
+
+
+
+
 <a name="0.1.16"></a>
 ## [0.1.16](https://github.com/advanced-rest-client/raw-payload-editor/compare/0.1.15...0.1.16) (2017-12-14)
 
