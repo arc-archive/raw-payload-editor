@@ -1,25 +1,23 @@
 {
-  "name": "raw-payload-editor",
-  "version": "1.0.0",
-  "license": "Apache-2.0 OR CC-BY-4.0",
+  "name": "@api-components/raw-payload-editor",
+  "version": "2.0.0-preview",
+  "license": "Apache-2.0",
   "description": "A raw payload input editor based on CodeMirror",
   "devDependencies": {
-    "bower": "^1.8.0",
-    "polymer-cli": "^1.2.0",
-    "shady-css-parser": "^0.1.0"
+    "@polymer/gen-typescript-declarations": "^1.1.1",
+    "bower": "^1.8.0"
   },
   "private": false,
-  "main": [
-    "raw-payload-editor.html"
+  "main": "raw-payload-editor.html",
+  "authors": [
+    "Pawel Psztyc",
+    "The Advanced REST Client authors"
   ],
-  "author": "The Advanced REST client authors <arc@mulesoft.com>",
   "scripts": {
-    "serve": "node_modules/.bin/polymer serve",
-    "lint": "node_modules/.bin/polymer lint raw-payload-editor.html --rules polymer-1",
+    "lint": "node_modules/.bin/polymer lint raw-payload-editor.html",
     "test-sauce": "node_modules/.bin/polymer test --plugin sauce --job-name \"raw-payload-editor:local-test\"",
     "test": "node_modules/.bin/polymer test --plugin local",
-    "deps": "npm install --quiet && bower install --quiet",
-    "update-deps": "npm update --quiet && bower update --quiet"
+    "update-types": "gen-typescript-declarations --deleteExisting --outDir ."
   },
   "repository": {
     "type": "git",
