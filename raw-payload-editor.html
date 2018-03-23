@@ -11,41 +11,14 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 -->
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../code-mirror/code-mirror.html">
+<link rel="import" href="../polymer/polymer-element.html">
 <link rel="import" href="../paper-button/paper-button.html">
-<link rel="import" href="../request-payload-editor-behavior/request-payload-editor-behavior.html">
-<link rel="import" href="../paper-tooltip/paper-tooltip.html">
 <link rel="import" href="../iron-resizable-behavior/iron-resizable-behavior.html">
-<link rel="import" href="../code-mirror-linter/code-mirror-linter-json.html">
 <link rel="import" href="../paper-toast/paper-toast.html">
 <link rel="import" href="../events-target-behavior/events-target-behavior.html">
-<!--
-`<raw-payload-editor>` A raw payload input editor based on CodeMirror.
-
-The element additionally shows Encode / Decode buttons if current content type value contains
-"x-www-form-urlencoded".
-
-The element listens for `content-type-changed` custom event and updates the `contentType` property
-automatically. This event is commonly used in ARC elements.
-
-### Example
-```
-<raw-payload-editor content-type="application/json"></raw-payload-editor>
-```
-
-### Styling
-`<raw-payload-editor>` provides the following custom properties and mixins for styling:
-
-Custom property | Description | Default
-----------------|-------------|----------
-`--raw-payload-editor` | Mixin applied to the element | `{}`
-`--raw-payload-editor-encode-buttons` | Mixin applied to encode / decode buttons container | `{}`
-
-@group UI Elements
-@element raw-payload-editor
-@demo demo/index.html
--->
+<link rel="import" href="../payload-parser-behavior/payload-parser-behavior.html">
+<link rel="import" href="../code-mirror/code-mirror.html">
+<link rel="import" href="../code-mirror-linter/code-mirror-linter-json.html">
 <dom-module id="raw-payload-editor">
   <template>
     <style>
@@ -66,128 +39,134 @@ Custom property | Description | Default
     </style>
     <template is="dom-if" if="[[encodeEnabled]]">
       <div class="action-buttons" data-type="form">
-        <span>
-          <paper-button on-tap="encodeValue">Encode payload</paper-button>
-          <paper-tooltip animation-delay="200">Encodes payload to x-www-form-urlencoded data</paper-tooltip>
-        </span>
-        <span>
-          <paper-button on-tap="decodeValue">Decode payload</paper-button>
-          <paper-tooltip animation-delay="200">Decodes payload to human readable form</paper-tooltip>
-        </span>
+        <paper-button on-tap="encodeValue" title="Encodes payload to x-www-form-urlencoded data">Encode payload</paper-button>
+        <paper-button on-tap="decodeValue" title="Decodes payload to human readable form">Decode payload</paper-button>
       </div>
     </template>
     <template is="dom-if" if="[[isJson]]">
       <div class="action-buttons" data-type="json">
-        <span>
-          <paper-button on-tap="formatValue" data-action="format-json">Format JSON</paper-button>
-          <paper-tooltip animation-delay="200">Formats JSON input.</paper-tooltip>
-        </span>
-        <span>
-          <paper-button on-tap="minifyValue" data-action="minify-json">Minify JSON</paper-button>
-          <paper-tooltip animation-delay="200">Removed whitespaces from the input</paper-tooltip>
-        </span>
+        <paper-button on-tap="formatValue" data-action="format-json" title="Formats JSON input.">Format JSON</paper-button>
+        <paper-button on-tap="minifyValue" data-action="minify-json" title="Removed whitespaces from the input">Minify JSON</paper-button>
       </div>
     </template>
-    <code-mirror mode="application/json" on-value-changed="_editorValueChanged" on-paste="_onPaste" lint="[[_lintObject]]" gutters="[[_cmGutters]]" include-custom-styles="[[_customStylesList]]"></code-mirror>
+    <code-mirror mode="application/json" on-value-changed="_editorValueChanged" on-paste="_onPaste" lint="[[_lintObject]]" gutters="[[_cmGutters]]"></code-mirror>
     <paper-toast id="invalidJsonToast">JSON value is invalid. Cannot parse value.</paper-toast>
   </template>
   <script>
-  /* global CodeMirror */
-  Polymer({
-    is: 'raw-payload-editor',
+  /**
+   * A raw payload input editor based on CodeMirror.
+   *
+   * The element additionally shows Encode / Decode buttons if current content type value contains
+   * "x-www-form-urlencoded".
+   *
+   * The element listens for `content-type-changed` custom event and updates the `contentType` property
+   * automatically. This event is commonly used in ARC elements.
+   *
+   * ### Example
+   * ```
+   * <raw-payload-editor content-type="application/json"></raw-payload-editor>
+   * ```
+   *
+   * ### Styling
+   * `<raw-payload-editor>` provides the following custom properties and mixins for styling:
+   *
+   * Custom property | Description | Default
+   * ----------------|-------------|----------
+   * `--raw-payload-editor` | Mixin applied to the element | `{}`
+   * `--raw-payload-editor-encode-buttons` | Mixin applied to encode / decode buttons container | `{}`
+   *
+   * @customElement
+   * @polymer
+   * @demo demo/index.html
+   * @memberof UiElements
+   * @appliesMixin Polymer.IronResizableBehavior
+   * @appliesMixin ArcBehaviors.EventsTargetBehavior
+   * @appliesMixin ArcBehaviors.PayloadParserBehavior
+   */
+  class RawPayloadEditor extends Polymer.mixinBehaviors([Polymer.IronResizableBehavior], ArcBehaviors.PayloadParserBehavior(ArcBehaviors.EventsTargetBehavior(Polymer.Element))) {
+    static get is() {
+      return 'raw-payload-editor';
+    }
+    static get properties() {
+      return {
+        /**
+         * Raw payload value
+         */
+        value: {
+          type: String,
+          notify: true,
+          observer: '_valueChanged'
+        },
+        /**
+         * Content-Type header value. Determines current code mirror mode.
+         */
+        contentType: {
+          type: String,
+          observer: '_onContentTypeChanged'
+        },
+        // Computed value, true if `contentType` contains `x-www-form-urlencoded`
+        encodeEnabled: {
+          type: Boolean,
+          computed: '_computeEncodeEnabled(contentType)',
+          value: false
+        },
+        // Computed value, true if `contentType` contains `/json`
+        isJson: {
+          type: Boolean,
+          computed: '_computeIsJson(contentType)',
+          value: false
+        },
+        _cmGutters: {
+          type: Array,
+          value: ['CodeMirror-lint-markers']
+        },
+        _lintObject: {
+          type: Object,
+          value: function() {
+            return false;
+          }
+        },
+        _customStylesList: Array
+      };
+    }
 
-    behaviors: [
-      ArcBehaviors.RequestPayloadEditorBehavior,
-      Polymer.IronResizableBehavior,
-      ArcBehaviors.EventsTargetBehavior
-    ],
+    constructor() {
+      super();
+      this._contentTypeHandler = this._contentTypeHandler.bind(this);
+      this._resizeHandler = this._resizeHandler.bind(this);
+    }
 
-    /**
-     * Event fire when the value of the editor change.
-     * This event is not fired if `attrForOpened` is set and corresponding value is not set.
-     *
-     * @event payload-value-changed
-     * @param {String} value Current payload value.
-     */
+    _attachListeners(node) {
+      node.addEventListener('content-type-changed', this._contentTypeHandler);
+      this.addEventListener('iron-resize', this._resizeHandler);
+    }
 
-    properties: {
-      /**
-       * Content-Type header value. Determines current code mirror mode.
-       */
-      contentType: {
-        type: String,
-        observer: '_onContentTypeChanged'
-      },
-      // Computed value, true if `contentType` contains `x-www-form-urlencoded`
-      encodeEnabled: {
-        type: Boolean,
-        computed: '_computeEncodeEnabled(contentType)',
-        value: false
-      },
-      // Computed value, true if `contentType` contains `/json`
-      isJson: {
-        type: Boolean,
-        computed: '_computeIsJson(contentType)',
-        value: false
-      },
-      _cmGutters: {
-        type: Array,
-        value: ['CodeMirror-lint-markers']
-      },
-      _lintObject: {
-        type: Object,
-        value: function() {
-          return false;
-        }
-      },
-      _customStylesList: {
-        type: Array
-      }
-    },
+    _detachListeners(node) {
+      node.removeEventListener('content-type-changed', this._contentTypeHandler);
+      this.removeEventListener('iron-resize', this._resizeHandler);
+    }
 
-    observers: [
-      '_valueChanged(value)',
-      '__isOpenedChanged(_isOpened)'
-    ],
+    ready() {
+      super.ready();
+      this.refresh();
+    }
 
-    listeners: {
-      'iron-resize': 'refresh'
-    },
-
-    _attachListeners: function(node) {
-      this.listen(node, 'content-type-changed', '_contentTypeHandler');
-    },
-
-    _detachListeners: function(node) {
-      this.unlisten(node, 'content-type-changed', '_contentTypeHandler');
-    },
-
-    __isOpenedChanged: function(isOpened) {
-      if (isOpened) {
-        this.__editorValueChange = false;
-        this._valueChanged(this.value);
-        this.refresh();
-      }
-    },
     /**
      * Forces render code-mirror content.
      * Should be used to when the element becomes visible after being hidden.
      */
-    refresh: function() {
-      if (!this._isOpened) {
-        return;
-      }
-      var elm = this.$$('code-mirror');
+    refresh() {
+      var elm = this.shadowRoot.querySelector('code-mirror');
       if (!elm) {
         return; // DOM not ready
       }
       elm.editor.refresh();
-    },
+    }
 
     /**
      * Changes CodeMirror mode when the content type value is updated.
      */
-    _onContentTypeChanged: function(ct) {
+    _onContentTypeChanged(ct) {
       this._setupLinter(ct);
       if (!ct) {
         return;
@@ -195,18 +174,18 @@ Custom property | Description | Default
       if (ct.indexOf && ct.indexOf(';') !== -1) {
         ct = ct.substr(0, ct.indexOf(';'));
       }
-      this.$$('code-mirror').mode = ct;
-    },
+      this.shadowRoot.querySelector('code-mirror').mode = ct;
+    }
     // Computes `encodeEnabled` based on content type.
-    _computeEncodeEnabled: function(ct) {
+    _computeEncodeEnabled(ct) {
       return this.__computeIs(ct, 'x-www-form-urlencoded');
-    },
+    }
 
-    _computeIsJson: function(ct) {
+    _computeIsJson(ct) {
       return this.__computeIs(ct, '/json');
-    },
+    }
 
-    __computeIs: function(ct, needle) {
+    __computeIs(ct, needle) {
       if (!ct) {
         return false;
       }
@@ -214,57 +193,48 @@ Custom property | Description | Default
         return true;
       }
       return false;
-    },
+    }
 
-    // Handler for the `content-type-changed` event. Sets the `contentType` property.
-    _contentTypeHandler: function(e) {
-      var ev = Polymer.dom(e);
-      if (ev.rootTarget === this) {
-        return;
-      }
-      var ct = e.detail.value;
+    /**
+     * Handler for the `content-type-changed` event. Sets the `contentType` property.
+     *
+     * @param {CustomEvent} e
+     */
+    _contentTypeHandler(e) {
+      const ct = e.detail.value;
       this.set('contentType', ct);
-    },
-
+    }
     /**
      * Handler for value change.
      * If the element is opened then it will fire change event.
      */
-    _valueChanged: function(value) {
-      if (this._isOpened) {
-        if (this.__editorValueChange) {
-          this.fire('payload-value-changed', {
-            value: value
-          });
-        } else {
-          this.$$('code-mirror').value = value;
-          if (this.__internalChange) {
-            // from encoder / decoder
-            this.fire('payload-value-changed', {
-              value: value
-            });
-          }
-        }
+    _valueChanged(value) {
+      if (this.__editorValueChange || !this.shadowRoot) {
+        return;
       }
-    },
-    // Called when the editor fires change event
-    _editorValueChanged: function(e) {
+      this.shadowRoot.querySelector('code-mirror').value = value;
+    }
+    /**
+     * Called when the editor fires change event
+     *
+     * @param {CustomEvent} e
+     */
+    _editorValueChanged(e) {
       e.stopPropagation();
-
       this.__editorValueChange = true;
       this.set('value', e.detail.value);
       this.__editorValueChange = false;
-    },
+    }
     /**
      * Formats JSON data on paste.
      * It only formats the input if no selection is applied, whole value
      * is selcted or input is empty.
      */
-    _onPaste: function(e) {
+    _onPaste(e) {
       if (this.contentType !== 'application/json') {
         return;
       }
-      var len;
+      let len;
       if (this.value) {
         len = this.value.length;
       }
@@ -272,27 +242,27 @@ Custom property | Description | Default
         return;
       }
 
-      var data = e.clipboardData.getData('text');
+      let data = e.clipboardData.getData('text');
       try {
         data = JSON.parse(data);
         data = JSON.stringify(data, null, 2);
         e.preventDefault();
         this.set('value', data);
       } catch (e) {}
-    },
+    }
     /**
      * Tests if text formatting on paste is allowed
      *
      * @param {Number} inputSize Size of current value
      * @return {Boolean} True to disallow altering the value on paste.
      */
-    _cancelPaste: function(inputSize) {
+    _cancelPaste(inputSize) {
       if (!inputSize) {
         return false;
       }
-      var el = document.activeElement;
-      var start = 0;
-      var end = 0;
+      const el = document.activeElement;
+      let start = 0;
+      let end = 0;
       if (el) {
         if (typeof el.selectionStart === 'number') {
           start = el.selectionStart;
@@ -302,11 +272,11 @@ Custom property | Description | Default
         }
       }
       if (start === 0 && end === 0) {
-        var selection = window.getSelection();
+        const selection = window.getSelection();
         if (selection.rangeCount === 0) {
           return false;
         }
-        var range = selection.getRangeAt(0);
+        const range = selection.getRangeAt(0);
         start = range.startOffset;
         end = range.endOffset;
       }
@@ -314,9 +284,10 @@ Custom property | Description | Default
         return false;
       }
       return true;
-    },
+    }
 
-    _setupLinter: function(ct) {
+    _setupLinter(ct) {
+      /* global CodeMirror */
       if (!ct || (ct.indexOf && ct.indexOf('/json') === -1)) {
         this.set('_lintObject', false);
         this.set('_customStylesList', undefined);
@@ -324,39 +295,67 @@ Custom property | Description | Default
         this.set('_lintObject', CodeMirror.lint.json);
         this.set('_customStylesList', ['code-mirror-lint']);
       }
-      var editor = this.$$('code-mirror').editor;
+      const editor = this.shadowRoot.querySelector('code-mirror').editor;
       if (editor) {
         editor.refresh();
       }
-    },
+    }
     /**
      * Formats current value as it is a JSON object.
      */
-    formatValue: function() {
+    formatValue() {
       try {
-        var value = this.value;
+        let value = this.value;
         value = JSON.parse(value);
         value = JSON.stringify(value, null, 2);
         this.set('value', value);
-      } catch (e) {
-        this.$.invalidJsonToast.opened = true;
-        console.log(e);
-      }
-    },
-    /**
-     * Minifies JSON value by removing whitespaces.
-     */
-    minifyValue: function() {
-      try {
-        var value = this.value;
-        value = JSON.parse(value);
-        value = JSON.stringify(value);
-        this.set('value', value);
+        this.refresh();
       } catch (e) {
         this.$.invalidJsonToast.opened = true;
         console.log(e);
       }
     }
-  });
+    /**
+     * Minifies JSON value by removing whitespaces.
+     */
+    minifyValue() {
+      try {
+        let value = this.value;
+        value = JSON.parse(value);
+        value = JSON.stringify(value);
+        this.set('value', value);
+        this.refresh();
+      } catch (e) {
+        this.$.invalidJsonToast.opened = true;
+        console.log(e);
+      }
+    }
+
+    _resizeHandler() {
+      this.refresh();
+    }
+
+    /**
+     * URL encodes payload value and resets the same value property.
+     * This should be used only for payloads with x-www-form-urlencoded content-type.
+     */
+    encodeValue() {
+      const value = this.encodeUrlEncoded(this.value);
+      this.__internalChange = true;
+      this.set('value', value);
+      this.__internalChange = false;
+    }
+    /**
+     * URL decodes payload value and resets the same value property.
+     * This should be used only for payloads with x-www-form-urlencoded content-type.
+     */
+    decodeValue() {
+      const value = this.decodeUrlEncoded(this.value);
+      this.__internalChange = true;
+      this.set('value', value);
+      this.__internalChange = false;
+    }
+  }
+  window.customElements.define(RawPayloadEditor.is, RawPayloadEditor);
   </script>
 </dom-module>

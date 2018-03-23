@@ -1,21 +1,10 @@
 <!doctype html>
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
 <html>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
-    <script src="../../iron-test-helpers/test-helpers.js"></script>
     <script src="../../iron-test-helpers/mock-interactions.js"></script>
     <link rel="import" href="../raw-payload-editor.html">
   </head>
@@ -43,7 +32,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       (node || document).dispatchEvent(event);
       return event;
     }
-    /* global fixture, assert, sinon, flush, MockInteractions */
+    /* global MockInteractions */
     suite('basic', function() {
       var element;
 
@@ -68,37 +57,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       test('Content type changes editor mode', function() {
         element.contentType = 'application/xml';
-        assert.equal(element.$$('code-mirror').mode, element.contentType);
+        assert.equal(element.shadowRoot.querySelector('code-mirror').mode, element.contentType);
       });
 
       test('Content type with charset changes editor mode', function() {
         element.contentType = 'application/xml; charset="utf-8"';
-        assert.equal(element.$$('code-mirror').mode, 'application/xml');
+        assert.equal(element.shadowRoot.querySelector('code-mirror').mode, 'application/xml');
       });
 
       test('The encodeEnabled is true for application/x-www-form-urlencoded', function() {
         element.contentType = 'application/x-www-form-urlencoded';
         assert.isTrue(element.encodeEnabled);
-      });
-
-      test('Fires payload-value-changed when editor value change', function() {
-        var spy = sinon.stub();
-        element.addEventListener('payload-value-changed', spy);
-        // emulates event
-        element._editorValueChanged({
-          stopPropagation: function() {},
-          detail: {
-            value: 'x-test'
-          }
-        });
-        assert.isTrue(spy.calledOnce);
-      });
-
-      test('Do not fires payload-value-changed when value change', function() {
-        var spy = sinon.stub();
-        element.addEventListener('payload-value-changed', spy);
-        element.value = 'test';
-        assert.isFalse(spy.called);
       });
 
       test('Code Mirror value changes after value change', function() {
@@ -120,7 +89,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       test('Action controls are rendered', function(done) {
         flush(function() {
-          var container = element.$$('.action-buttons[data-type="form"]');
+          var container = element.shadowRoot.querySelector('.action-buttons[data-type="form"]');
           assert.ok(container);
           done();
         });
@@ -132,28 +101,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         assert.equal(element.value, encodedValue);
       });
 
-      test('Encodes parameters fires payload-value-changed event', function() {
-        var spy = sinon.stub();
-        element.addEventListener('payload-value-changed', spy);
-        element.value = decodedValue;
-
-        element.encodeValue();
-        assert.isTrue(spy.calledOnce);
-      });
-
       test('Decodes parameters', function() {
         element.value = encodedValue;
         element.decodeValue();
         assert.equal(element.value, decodedValue);
-      });
-
-      test('Decodes parameters fires payload-value-changed event', function() {
-        var spy = sinon.stub();
-        element.addEventListener('payload-value-changed', spy);
-        element.value = encodedValue;
-
-        element.decodeValue();
-        assert.isTrue(spy.calledOnce);
       });
     });
 
@@ -176,7 +127,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var initialValue = '{"a":"b"}';
         element.value = initialValue;
         flush(function() {
-          var button = element.$$('[data-action="format-json"]');
+          var button = element.shadowRoot.querySelector('[data-action="format-json"]');
           MockInteractions.tap(button);
           assert.typeOf(element.value, 'string');
           assert.isAbove(element.value.length, 9);
@@ -189,7 +140,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var finalValue = '{"a":"b"}';
         element.value = initialValue;
         flush(function() {
-          var button = element.$$('[data-action="minify-json"]');
+          var button = element.shadowRoot.querySelector('[data-action="minify-json"]');
           MockInteractions.tap(button);
           assert.equal(element.value, finalValue);
           done();
