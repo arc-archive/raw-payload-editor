@@ -1,5 +1,5 @@
 language: node_js
-node_js: stable
+node_js: 8
 sudo: required
 before_script:
 - npm install -g polymer-cli
@@ -13,7 +13,6 @@ addons:
     - google-chrome-stable
   sauce_connect: true
 script:
-- npm run lint
 - xvfb-run polymer test polymer test --plugin local
 - if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then polymer test --plugin sauce --job-name
   "raw-payload-editor:${TRAVIS_BRANCH}" --build-number=${TRAVIS_BUILD_NUMBER}; fi
