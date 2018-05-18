@@ -1,9 +1,26 @@
 [![Build Status](https://travis-ci.org/advanced-rest-client/raw-payload-editor.svg?branch=stage)](https://travis-ci.org/advanced-rest-client/raw-payload-editor)  
 
-# raw-payload-editor
- global CodeMirror 
 
-### Events
-| Name | Description | Params |
-| --- | --- | --- |
-| payload-value-changed | Event fire when the value of the editor change. This event is not fired if `attrForOpened` is set and corresponding value is not set. | value **String** - Current payload value. |
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/advanced-rest-client/raw-payload-editor)
+
+## &lt;raw-payload-editor&gt;
+
+A raw payload input editor based on CodeMirror.
+
+<!---
+```
+<custom-element-demo>
+  <template>
+    <link rel="import" href="raw-payload-editor.html">
+    <next-code-block></next-code-block>
+  </template>
+</custom-element-demo>
+```
+-->
+```html
+<raw-payload-editor content-type="application/json"></raw-payload-editor>
+```
+
+### API components
+
+This components is a part of API components ecosystem: https://elements.advancedrestclient.com/
