@@ -4,7 +4,7 @@
   "license": "Apache-2.0",
   "description": "A raw payload input editor based on CodeMirror",
   "devDependencies": {
-    "@polymer/gen-typescript-declarations": "^1.1.1"
+    "@polymer/gen-typescript-declarations": "^1.6.1"
   },
   "private": false,
   "main": "raw-payload-editor.html",
