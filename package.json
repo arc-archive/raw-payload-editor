@@ -1,13 +1,32 @@
 {
-  "name": "@api-components/raw-payload-editor",
-  "version": "2.0.1",
-  "license": "Apache-2.0",
   "description": "A raw payload input editor based on CodeMirror",
-  "devDependencies": {
-    "@polymer/gen-typescript-declarations": "^1.6.1"
+  "keywords": [
+    "web-components",
+    "polymer",
+    "payload-editor",
+    "code-mirror"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/advanced-rest-client/raw-payload-editor.git"
   },
-  "private": false,
-  "main": "raw-payload-editor.html",
+  "name": "@api-components/raw-payload-editor",
+  "version": "3.0.0-preview.1",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@polymer/gen-typescript-declarations": "^1.6.1",
+    "@polymer/iron-demo-helpers": "^3.0.0",
+    "@polymer/iron-test-helpers": "^3.0.0",
+    "@webcomponents/webcomponentsjs": "^2.0.0",
+    "@polymer/iron-component-page": "^4.0.0",
+    "@polymer/paper-checkbox": "^3.0.0",
+    "@polymer/test-fixture": "^4.0.2",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "sinon": "^7.2.3",
+    "wct-mocha": "^1.0.0"
+  },
+  "main": "raw-payload-editor.js",
   "authors": [
     "Pawel Psztyc",
     "The Advanced REST Client authors"
@@ -18,12 +37,18 @@
     "test": "polymer test --plugin local",
     "update-types": "gen-typescript-declarations --deleteExisting --outDir ."
   },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/advanced-rest-client/raw-payload-editor.git"
-  },
   "bugs": {
     "url": "https://github.com/advanced-rest-client/raw-payload-editor/issues",
     "email": "arc@mulesoft.com"
+  },
+  "contributors": [
+    "Pawel Psztyc",
+    "The Advanced REST client authors <arc@mulesoft.com>"
+  ],
+  "dependencies": {
+    "@polymer/polymer": "^3.0.0",
+    "@polymer/paper-button": "^3.0.0",
+    "@polymer/iron-resizable-behavior": "^3.0.0",
+    "@polymer/paper-toast": "^3.0.0"
   }
 }

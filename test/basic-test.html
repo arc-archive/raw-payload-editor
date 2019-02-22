@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-    <script src="../../web-component-tester/browser.js"></script>
-    <script src="../../iron-test-helpers/mock-interactions.js"></script>
-    <link rel="import" href="../raw-payload-editor.html">
+    <script src="../../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+    <script src="../../../wct-browser-legacy/browser.js"></script>
+    <script src="../../../@polymer/iron-test-helpers/mock-interactions.js" type="module"></script>
+    <script type="module" src="../raw-payload-editor.js"></script>
   </head>
   <body>
 
@@ -22,132 +22,134 @@
       </template>
     </test-fixture>
 
-    <script>
-    function fire(name, detail, node) {
-      var event = new CustomEvent(name, {
-        bubbles: true,
-        composed: true,
-        detail: detail
-      });
-      (node || document).dispatchEvent(event);
-      return event;
-    }
-    /* global MockInteractions */
-    suite('basic', function() {
-      var element;
+    <script type="module">
+import '../raw-payload-editor.js';
+import { dom } from '../../../@polymer/polymer/lib/legacy/polymer.dom.js';
+function fire(name, detail, node) {
+  var event = new CustomEvent(name, {
+    bubbles: true,
+    composed: true,
+    detail: detail
+  });
+  (node || document).dispatchEvent(event);
+  return event;
+}
+/* global MockInteractions */
+suite('basic', function() {
+  var element;
 
-      setup(function() {
-        element = fixture('basic');
-      });
+  setup(function() {
+    element = fixture('basic');
+  });
 
-      test('contentType is undefined', function() {
-        assert.isUndefined(element.contentType);
-      });
+  test('contentType is undefined', function() {
+    assert.isUndefined(element.contentType);
+  });
 
-      test('encodeEnabled is false', function() {
-        assert.isFalse(element.encodeEnabled);
-      });
+  test('encodeEnabled is false', function() {
+    assert.isFalse(element.encodeEnabled);
+  });
 
-      test('Handling content-type-changed', function() {
-        fire('content-type-changed', {
-          value: 'text/plain'
-        });
-        assert.equal(element.contentType, 'text/plain');
-      });
-
-      test('Content type changes editor mode', function() {
-        element.contentType = 'application/xml';
-        assert.equal(element.shadowRoot.querySelector('code-mirror').mode, element.contentType);
-      });
-
-      test('Content type with charset changes editor mode', function() {
-        element.contentType = 'application/xml; charset="utf-8"';
-        assert.equal(element.shadowRoot.querySelector('code-mirror').mode, 'application/xml');
-      });
-
-      test('The encodeEnabled is true for application/x-www-form-urlencoded', function() {
-        element.contentType = 'application/x-www-form-urlencoded';
-        assert.isTrue(element.encodeEnabled);
-      });
-
-      test('Code Mirror value changes after value change', function() {
-        element.value = 'test';
-        var cm = Polymer.dom(element.root).querySelector('code-mirror');
-        assert.equal(cm.value, element.value);
-      });
+  test('Handling content-type-changed', function() {
+    fire('content-type-changed', {
+      value: 'text/plain'
     });
+    assert.equal(element.contentType, 'text/plain');
+  });
 
-    suite('encoder-decoder', function() {
-      var element;
-      var decodedValue = 'x test=x value';
-      var encodedValue = 'x+test=x+value';
+  test('Content type changes editor mode', function() {
+    element.contentType = 'application/xml';
+    assert.equal(element.shadowRoot.querySelector('code-mirror').mode, element.contentType);
+  });
 
-      setup(function() {
-        element = fixture('encode');
-        element.contentType = 'application/x-www-form-urlencoded';
-      });
+  test('Content type with charset changes editor mode', function() {
+    element.contentType = 'application/xml; charset="utf-8"';
+    assert.equal(element.shadowRoot.querySelector('code-mirror').mode, 'application/xml');
+  });
 
-      test('Action controls are rendered', function(done) {
-        flush(function() {
-          var container = element.shadowRoot.querySelector('.action-buttons[data-type="form"]');
-          assert.ok(container);
-          done();
-        });
-      });
+  test('The encodeEnabled is true for application/x-www-form-urlencoded', function() {
+    element.contentType = 'application/x-www-form-urlencoded';
+    assert.isTrue(element.encodeEnabled);
+  });
 
-      test('Encodes parameters', function() {
-        element.value = decodedValue;
-        element.encodeValue();
-        assert.equal(element.value, encodedValue);
-      });
+  test('Code Mirror value changes after value change', function() {
+    element.value = 'test';
+    var cm = dom(element.root).querySelector('code-mirror');
+    assert.equal(cm.value, element.value);
+  });
+});
 
-      test('Decodes parameters', function() {
-        element.value = encodedValue;
-        element.decodeValue();
-        assert.equal(element.value, decodedValue);
-      });
+suite('encoder-decoder', function() {
+  var element;
+  var decodedValue = 'x test=x value';
+  var encodedValue = 'x+test=x+value';
+
+  setup(function() {
+    element = fixture('encode');
+    element.contentType = 'application/x-www-form-urlencoded';
+  });
+
+  test('Action controls are rendered', function(done) {
+    flush(function() {
+      var container = element.shadowRoot.querySelector('.action-buttons[data-type="form"]');
+      assert.ok(container);
+      done();
     });
+  });
 
-    suite('JSON tranformer', function() {
-      var element;
-      setup(function() {
-        element = fixture('encode');
-        element.contentType = 'application/json';
-      });
+  test('Encodes parameters', function() {
+    element.value = decodedValue;
+    element.encodeValue();
+    assert.equal(element.value, encodedValue);
+  });
 
-      test('Formatting controls are rendered', function(done) {
-        flush(function() {
-          var container = element.$$('.action-buttons[data-type="json"]');
-          assert.ok(container);
-          done();
-        });
-      });
+  test('Decodes parameters', function() {
+    element.value = encodedValue;
+    element.decodeValue();
+    assert.equal(element.value, decodedValue);
+  });
+});
 
-      test('Formats JSON', function(done) {
-        var initialValue = '{"a":"b"}';
-        element.value = initialValue;
-        flush(function() {
-          var button = element.shadowRoot.querySelector('[data-action="format-json"]');
-          MockInteractions.tap(button);
-          assert.typeOf(element.value, 'string');
-          assert.isAbove(element.value.length, 9);
-          done();
-        });
-      });
+suite('JSON tranformer', function() {
+  var element;
+  setup(function() {
+    element = fixture('encode');
+    element.contentType = 'application/json';
+  });
 
-      test('Minifies JSON', function(done) {
-        var initialValue = '{\t"a":\n"b"\n\t}';
-        var finalValue = '{"a":"b"}';
-        element.value = initialValue;
-        flush(function() {
-          var button = element.shadowRoot.querySelector('[data-action="minify-json"]');
-          MockInteractions.tap(button);
-          assert.equal(element.value, finalValue);
-          done();
-        });
-      });
+  test('Formatting controls are rendered', function(done) {
+    flush(function() {
+      var container = element.$$('.action-buttons[data-type="json"]');
+      assert.ok(container);
+      done();
     });
-    </script>
+  });
+
+  test('Formats JSON', function(done) {
+    var initialValue = '{"a":"b"}';
+    element.value = initialValue;
+    flush(function() {
+      var button = element.shadowRoot.querySelector('[data-action="format-json"]');
+      MockInteractions.tap(button);
+      assert.typeOf(element.value, 'string');
+      assert.isAbove(element.value.length, 9);
+      done();
+    });
+  });
+
+  test('Minifies JSON', function(done) {
+    var initialValue = '{\t"a":\n"b"\n\t}';
+    var finalValue = '{"a":"b"}';
+    element.value = initialValue;
+    flush(function() {
+      var button = element.shadowRoot.querySelector('[data-action="minify-json"]');
+      MockInteractions.tap(button);
+      assert.equal(element.value, finalValue);
+      done();
+    });
+  });
+});
+</script>
 
   </body>
 </html>
