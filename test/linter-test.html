@@ -4,9 +4,21 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
 
-    <script src="../../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
-    <script src="../../../wct-browser-legacy/browser.js"></script>
-    <script type="module" src="../raw-payload-editor.js"></script>
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../node_modules/@polymer/test-fixture/test-fixture.js"></script>
+    <script src="../node_modules/mocha/mocha.js"></script>
+    <script src="../node_modules/chai/chai.js"></script>
+    <script src="../node_modules/wct-mocha/wct-mocha.js"></script>
+
+    <script src="../../../jsonlint/lib/jsonlint.js"></script>
+    <script src="../../../codemirror/lib/codemirror.js"></script>
+    <script src="../../../codemirror/addon/mode/loadmode.js"></script>
+    <script src="../../../codemirror/mode/meta.js"></script>
+    <script src="../../../codemirror/mode/javascript/javascript.js"></script>
+    <script src="../../../codemirror/mode/xml/xml.js"></script>
+    <script src="../../../codemirror/mode/htmlmixed/htmlmixed.js"></script>
+    <script src="../../../codemirror/addon/lint/lint.js"></script>
+    <script src="../../../codemirror/addon/lint/json-lint.js"></script>
   </head>
   <body>
 
@@ -17,53 +29,43 @@
     </test-fixture>
 
     <script type="module">
-import '../raw-payload-editor.js';
-suite('basic', function() {
-  var element;
+    import '../raw-payload-editor.js';
+    suite('basic', function() {
+      let element;
 
-  setup(function() {
-    element = fixture('basic');
-  });
+      setup(function() {
+        element = fixture('basic');
+      });
 
-  test('_cmGutters is set', function() {
-    assert.typeOf(element._cmGutters, 'array');
-    assert.lengthOf(element._cmGutters, 1);
-  });
+      test('Setting JSON content type sets lint on the editor', function() {
+        element.contentType = 'application/json';
+        assert.typeOf(element.$.cm.lint, 'function');
+      });
 
-  test('_customStylesList is undefined by default', function() {
-    assert.isUndefined(element._customStylesList);
-  });
+      test('Setting JSON content type sets gutters on the editor', function() {
+        element.contentType = 'application/json';
+        assert.deepEqual(element.$.cm.gutters, ['code-mirror-lint', 'CodeMirror-lint-markers']);
+      });
 
-  test('_lintObject is false by default', function() {
-    assert.isFalse(element._lintObject);
-  });
+      test('Clearing content type removes lint function', function(done) {
+        element.contentType = 'application/json';
+        setTimeout(() => {
+          element.contentType = undefined;
+          assert.isFalse(element.$.cm.lint);
+          done();
+        });
+      });
 
-  test('Setting JSON content type sets _lintObject', function() {
-    element.contentType = 'application/json';
-    assert.typeOf(element._lintObject, 'function');
-  });
-
-  test('Setting JSON content type sets _customStylesList', function() {
-    element.contentType = 'application/json';
-    assert.typeOf(element._customStylesList, 'array');
-    assert.lengthOf(element._customStylesList, 1);
-  });
-
-  test('Clearing content type removes _customStylesList', function() {
-    element.contentType = 'application/json';
-    assert.typeOf(element._customStylesList, 'array');
-    element.contentType = undefined;
-    assert.isUndefined(element._customStylesList);
-  });
-
-  test('Clearing content type removes _customStylesList', function() {
-    element.contentType = 'application/json';
-    assert.typeOf(element._lintObject, 'function');
-    element.contentType = undefined;
-    assert.isFalse(element._lintObject);
-  });
-});
-</script>
+      test('Clearing content type removes updates gutters', function(done) {
+        element.contentType = 'application/json';
+        setTimeout(() => {
+          element.contentType = undefined;
+          assert.deepEqual(element.$.cm.gutters, ['CodeMirror-lint-markers']);
+          done();
+        });
+      });
+    });
+    </script>
 
   </body>
 </html>

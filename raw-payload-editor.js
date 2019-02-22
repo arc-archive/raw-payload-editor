@@ -1,6 +1,6 @@
 /**
 @license
-Copyright 2016 The Advanced REST client authors <arc@mulesoft.com>
+Copyright 2019 The Advanced REST client authors <arc@mulesoft.com>
 Licensed under the Apache License, Version 2.0 (the "License"); you may not
 use this file except in compliance with the License. You may obtain a copy of
 the License at
@@ -11,17 +11,16 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 */
-import { PolymerElement } from '../../@polymer/polymer/polymer-element.js';
-
-import '../../@polymer/paper-button/paper-button.js';
-import { IronResizableBehavior } from '../../@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
-import '../../@polymer/paper-toast/paper-toast.js';
-import { EventsTargetBehavior } from '../../events-target-behavior/events-target-behavior.js';
-import '../../payload-parser-behavior/payload-parser-behavior.js';
-import '../../code-mirror/code-mirror.js';
-import '../../code-mirror-linter/code-mirror-linter-json.js';
-import { html } from '../../@polymer/polymer/lib/utils/html-tag.js';
-import { mixinBehaviors } from '../../@polymer/polymer/lib/legacy/class.js';
+import {PolymerElement} from '@polymer/polymer/polymer-element.js';
+import {IronResizableBehavior} from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
+import {html} from '@polymer/polymer/lib/utils/html-tag.js';
+import {mixinBehaviors} from '@polymer/polymer/lib/legacy/class.js';
+import {EventsTargetMixin} from '@advanced-rest-client/events-target-mixin/events-target-mixin.js';
+import {PayloadParserMixin} from '@advanced-rest-client/payload-parser-mixin/payload-parser-mixin.js';
+import '@polymer/paper-toast/paper-toast.js';
+import '@polymer/paper-button/paper-button.js';
+import '@advanced-rest-client/code-mirror/code-mirror.js';
+import '@advanced-rest-client/code-mirror-linter/code-mirror-linter.js';
 /**
  * A raw payload input editor based on CodeMirror.
  *
@@ -48,11 +47,12 @@ import { mixinBehaviors } from '../../@polymer/polymer/lib/legacy/class.js';
  * @polymer
  * @demo demo/index.html
  * @memberof UiElements
- * @appliesMixin Polymer.IronResizableBehavior
- * @appliesMixin ArcBehaviors.EventsTargetBehavior
- * @appliesMixin ArcBehaviors.PayloadParserBehavior
+ * @polymerBehavior Polymer.IronResizableBehavior
+ * @appliesMixin EventsTargetMixin
+ * @appliesMixin PayloadParserMixin
  */
-class RawPayloadEditor extends mixinBehaviors([IronResizableBehavior], ArcBehaviors.PayloadParserBehavior(EventsTargetBehavior(PolymerElement))) {
+class RawPayloadEditor extends
+  mixinBehaviors([IronResizableBehavior], PayloadParserMixin(EventsTargetMixin(PolymerElement))) {
   static get template() {
     return html`
     <style>
@@ -73,17 +73,22 @@ class RawPayloadEditor extends mixinBehaviors([IronResizableBehavior], ArcBehavi
     </style>
     <template is="dom-if" if="[[encodeEnabled]]">
       <div class="action-buttons" data-type="form">
-        <paper-button on-tap="encodeValue" title="Encodes payload to x-www-form-urlencoded data">Encode payload</paper-button>
-        <paper-button on-tap="decodeValue" title="Decodes payload to human readable form">Decode payload</paper-button>
+        <paper-button on-tap="encodeValue"
+          title="Encodes payload to x-www-form-urlencoded data">Encode payload</paper-button>
+        <paper-button on-tap="decodeValue"
+          title="Decodes payload to human readable form">Decode payload</paper-button>
       </div>
     </template>
     <template is="dom-if" if="[[isJson]]">
       <div class="action-buttons" data-type="json">
-        <paper-button on-tap="formatValue" data-action="format-json" title="Formats JSON input.">Format JSON</paper-button>
-        <paper-button on-tap="minifyValue" data-action="minify-json" title="Removed whitespaces from the input">Minify JSON</paper-button>
+        <paper-button on-tap="formatValue" data-action="format-json"
+          title="Formats JSON input.">Format JSON</paper-button>
+        <paper-button on-tap="minifyValue" data-action="minify-json"
+          title="Removed whitespaces from the input">Minify JSON</paper-button>
       </div>
     </template>
-    <code-mirror mode="application/json" on-value-changed="_editorValueChanged" on-paste="_onPaste" lint="[[_lintObject]]" gutters="[[_cmGutters]]"></code-mirror>
+    <code-mirror id="cm" mode="application/json" on-value-changed="_editorValueChanged"
+      on-paste="_onPaste" gutters='["CodeMirror-lint-markers"]'></code-mirror>
     <paper-toast id="invalidJsonToast">JSON value is invalid. Cannot parse value.</paper-toast>
 `;
   }
@@ -119,18 +124,7 @@ class RawPayloadEditor extends mixinBehaviors([IronResizableBehavior], ArcBehavi
         type: Boolean,
         computed: '_computeIsJson(contentType)',
         value: false
-      },
-      _cmGutters: {
-        type: Array,
-        value: ['CodeMirror-lint-markers']
-      },
-      _lintObject: {
-        type: Object,
-        value: function() {
-          return false;
-        }
-      },
-      _customStylesList: Array
+      }
     };
   }
 
@@ -160,15 +154,13 @@ class RawPayloadEditor extends mixinBehaviors([IronResizableBehavior], ArcBehavi
    * Should be used to when the element becomes visible after being hidden.
    */
   refresh() {
-    var elm = this.shadowRoot.querySelector('code-mirror');
-    if (!elm) {
-      return; // DOM not ready
-    }
-    elm.editor.refresh();
+    this.$.cm.refresh();
   }
 
   /**
    * Changes CodeMirror mode when the content type value is updated.
+   *
+   * @param {String} ct
    */
   _onContentTypeChanged(ct) {
     this._setupLinter(ct);
@@ -211,6 +203,8 @@ class RawPayloadEditor extends mixinBehaviors([IronResizableBehavior], ArcBehavi
   /**
    * Handler for value change.
    * If the element is opened then it will fire change event.
+   *
+   * @param {String} value
    */
   _valueChanged(value) {
     if (this.__editorValueChange || !this.shadowRoot) {
@@ -233,6 +227,8 @@ class RawPayloadEditor extends mixinBehaviors([IronResizableBehavior], ArcBehavi
    * Formats JSON data on paste.
    * It only formats the input if no selection is applied, whole value
    * is selcted or input is empty.
+   *
+   * @param {Event} e
    */
   _onPaste(e) {
     if (this.contentType !== 'application/json') {
@@ -292,17 +288,15 @@ class RawPayloadEditor extends mixinBehaviors([IronResizableBehavior], ArcBehavi
 
   _setupLinter(ct) {
     /* global CodeMirror */
-    if (!ct || (ct.indexOf && ct.indexOf('/json') === -1)) {
-      this.set('_lintObject', false);
-      this.set('_customStylesList', undefined);
+    const editor = this.$.cm;
+    if (this._computeIsJson(ct)) {
+      editor.lint = CodeMirror.lint.json;
+      editor.gutters = ['code-mirror-lint', 'CodeMirror-lint-markers'];
     } else {
-      this.set('_lintObject', CodeMirror.lint.json);
-      this.set('_customStylesList', ['code-mirror-lint']);
+      editor.lint = false;
+      editor.gutters = ['CodeMirror-lint-markers'];
     }
-    const editor = this.shadowRoot.querySelector('code-mirror').editor;
-    if (editor) {
-      editor.refresh();
-    }
+    editor.refresh();
   }
   /**
    * Formats current value as it is a JSON object.

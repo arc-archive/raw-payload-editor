@@ -1,37 +1,23 @@
 <!doctype html>
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
 <html>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
   <title>raw-payload-editor demo</title>
-  <script src="../../../@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
-  <script type="module" src="../../../@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
-  <script type="module" src="../../../@polymer/iron-demo-helpers/demo-snippet.js"></script>
-  <script type="module" src="../../../@polymer/polymer/lib/elements/dom-bind.js"></script>
-  <script type="module" src="../../../content-type-selector/content-type-selector.js"></script>
-  <script type="module" src="../raw-payload-editor.js"></script>
-  <!-- FIXME(polymer-modulizer):
-        These imperative modules that innerHTML your HTML are
-        a hacky way to be sure that any mixins in included style
-        modules are ready before any elements that reference them are
-        instantiated, otherwise the CSS @apply mixin polyfill won't be
-        able to expand the underlying CSS custom properties.
-        See: https://github.com/Polymer/polymer-modulizer/issues/154
-        -->
-    <script type="module">
-const $_documentContainer = document.createElement('template');
 
-$_documentContainer.innerHTML = `<custom-style>
+  <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../../../web-animations-js/web-animations-next.min.js"></script>
+
+  <script type="module">
+    import '@polymer/iron-demo-helpers/demo-pages-shared-styles.js';
+    import '@polymer/polymer/lib/elements/dom-bind.js';
+    import '@polymer/iron-demo-helpers/demo-snippet.js';
+    import '@advanced-rest-client/content-type-selector/content-type-selector.js';
+    import '../raw-payload-editor.js';
+  </script>
+
+  <custom-style>
     <style is="custom-style" include="demo-pages-shared-styles">
     :root {
       --arc-code-mirror-background-color: #f5f2f0;
@@ -59,17 +45,37 @@ $_documentContainer.innerHTML = `<custom-style>
       color: rgba(0,0,0,0.74);
     }
     </style>
-  </custom-style>`;
+  </custom-style>
 
-document.body.appendChild($_documentContainer.content);
-</script>
+  <!--
+  With HTML imports this was relatively easy task to perform inside web component.
+  With module imports it's all get very messy with legacy scripts (using webpack or whatever).
+  This scripts cannot be loaded inside the the module as it wont be added to the window object.
+  CodeMirror uses `this` instead of `window` or `self` and do not exports any instance.
+  Therefore the CM scripts has to be loaded outside the componet.
+  -->
+  <script src="../../../jsonlint/lib/jsonlint.js"></script>
+  <script src="../../../codemirror/lib/codemirror.js"></script>
+  <script src="../../../codemirror/addon/mode/loadmode.js"></script>
+  <script src="../../../codemirror/mode/meta.js"></script>
+  <script src="../../../codemirror/mode/javascript/javascript.js"></script>
+  <script src="../../../codemirror/mode/xml/xml.js"></script>
+  <script src="../../../codemirror/mode/htmlmixed/htmlmixed.js"></script>
+  <script src="../../../codemirror/addon/lint/lint.js"></script>
+  <script src="../../../codemirror/addon/lint/json-lint.js"></script>
+  <!--
+  From the inside of the web component it is hard to determine where
+  scripts are actually located. This should be set if the page won't load all possible
+  scripts at run time. The component will download the "mode" from this location.
+  -->
+  <script>
+  /* global CodeMirror */
+  CodeMirror.modeURL = '../../../codemirror/mode/%N/%N.js';
+  </script>
 </head>
 <body unresolved>
-  <script type="module">
-const $_documentContainer = document.createElement('template');
-
-$_documentContainer.innerHTML = `<div class="vertical-section-container centered">
-    <h3>The \`raw-payload-editor\`</h3>
+  <div class="vertical-section-container centered">
+    <h3>The raw-payload-editor</h3>
     <demo-snippet>
       <template>
         <dom-bind>
@@ -81,23 +87,17 @@ $_documentContainer.innerHTML = `<div class="vertical-section-container centered
         </dom-bind>
       </template>
     </demo-snippet>
-  </div>`;
-
-document.body.appendChild($_documentContainer.content);
-</script>
+  </div>
   <script type="module">
-import '../../../@polymer/iron-demo-helpers/demo-pages-shared-styles.js';
-import '../../../@polymer/iron-demo-helpers/demo-snippet.js';
-import '../../../@polymer/polymer/lib/elements/dom-bind.js';
-import '../../../content-type-selector/content-type-selector.js';
-import '../raw-payload-editor.js';
-document.body.dispatchEvent(new CustomEvent('content-type-changed', {
-  bubbles: true,
-  cancelable: true,
-  detail: {
-    value: 'application/json'
-  }
-}));
-</script>
+  window.addEventListener('WebComponentsReady', () => {
+    document.body.dispatchEvent(new CustomEvent('content-type-changed', {
+      bubbles: true,
+      cancelable: true,
+      detail: {
+        value: 'application/json'
+      }
+    }));
+  });
+  </script>
 </body>
 </html>

@@ -4,111 +4,69 @@
     {
       "description": "A raw payload input editor based on CodeMirror.\n\nThe element additionally shows Encode / Decode buttons if current content type value contains\n\"x-www-form-urlencoded\".\n\nThe element listens for `content-type-changed` custom event and updates the `contentType` property\nautomatically. This event is commonly used in ARC elements.\n\n### Example\n```\n<raw-payload-editor content-type=\"application/json\"></raw-payload-editor>\n```\n\n### Styling\n`<raw-payload-editor>` provides the following custom properties and mixins for styling:\n\nCustom property | Description | Default\n----------------|-------------|----------\n`--raw-payload-editor` | Mixin applied to the element | `{}`\n`--raw-payload-editor-encode-buttons` | Mixin applied to encode / decode buttons container | `{}`",
       "summary": "",
-      "path": "raw-payload-editor.html",
+      "path": "raw-payload-editor.js",
       "properties": [
         {
-          "name": "_parentResizable",
-          "type": "Object",
-          "description": "The closest ancestor element that implements `IronResizableBehavior`.",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 36,
-              "column": 6
-            },
-            "end": {
-              "line": 39,
-              "column": 7
-            }
-          },
-          "metadata": {
-            "polymer": {
-              "observer": "\"_parentResizableChanged\""
-            }
-          },
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "_notifyingDescendant",
-          "type": "boolean",
-          "description": "True if this element is currently notifying its descendant elements of\nresize.",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 45,
-              "column": 6
-            },
-            "end": {
-              "line": 48,
-              "column": 7
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          },
-          "defaultValue": "false",
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
           "name": "eventsTarget",
-          "type": "Object",
+          "type": "Object | null | undefined",
           "description": "Events handlers target. By default the element listens on\n`window` object. If set, all events listeners will be attached to this\nobject instead of `window`.",
           "privacy": "public",
           "sourceRange": {
-            "file": "bower_components/events-target-behavior/events-target-behavior.html",
+            "file": "../@advanced-rest-client/events-target-mixin/events-target-mixin.js",
             "start": {
-              "line": 73,
+              "line": 64,
               "column": 8
             },
             "end": {
-              "line": 76,
+              "line": 67,
               "column": 9
             }
           },
           "metadata": {
             "polymer": {
-              "observer": "\"_eventsTargetChanged\""
+              "observer": "\"_eventsTargetChanged\"",
+              "attributeType": "Object"
             }
           },
-          "inheritedFrom": "ArcBehaviors.EventsTargetBehavior"
+          "inheritedFrom": "EventsTargetMixin"
         },
         {
           "name": "_oldEventsTarget",
-          "type": "Object",
+          "type": "Object | null | undefined",
           "description": "An event target used to attach listeners.",
           "privacy": "protected",
           "sourceRange": {
-            "file": "bower_components/events-target-behavior/events-target-behavior.html",
+            "file": "../@advanced-rest-client/events-target-mixin/events-target-mixin.js",
             "start": {
-              "line": 78,
+              "line": 69,
               "column": 8
             },
             "end": {
-              "line": 78,
+              "line": 69,
               "column": 32
             }
           },
           "metadata": {
-            "polymer": {}
+            "polymer": {
+              "attributeType": "Object"
+            }
           },
-          "inheritedFrom": "ArcBehaviors.EventsTargetBehavior"
+          "inheritedFrom": "EventsTargetMixin"
         },
         {
           "name": "AMP_RE",
-          "type": "RegExp",
+          "type": "?",
           "description": "Regexp to search for the `&` character",
           "privacy": "public",
           "sourceRange": {
-            "file": "bower_components/payload-parser-behavior/payload-parser-behavior.html",
+            "file": "../@advanced-rest-client/payload-parser-mixin/payload-parser-mixin.js",
             "start": {
-              "line": 43,
-              "column": 8
+              "line": 39,
+              "column": 4
             },
             "end": {
-              "line": 49,
-              "column": 9
+              "line": 41,
+              "column": 5
             }
           },
           "metadata": {
@@ -116,22 +74,22 @@
               "readOnly": true
             }
           },
-          "inheritedFrom": "ArcBehaviors.PayloadParserBehavior"
+          "inheritedFrom": "ArcBehaviors.PayloadParserMixin"
         },
         {
           "name": "GT_RE",
-          "type": "RegExp",
+          "type": "?",
           "description": "Regexp to search for the `>` character",
           "privacy": "public",
           "sourceRange": {
-            "file": "bower_components/payload-parser-behavior/payload-parser-behavior.html",
+            "file": "../@advanced-rest-client/payload-parser-mixin/payload-parser-mixin.js",
             "start": {
-              "line": 51,
-              "column": 8
+              "line": 46,
+              "column": 4
             },
             "end": {
-              "line": 57,
-              "column": 9
+              "line": 48,
+              "column": 5
             }
           },
           "metadata": {
@@ -139,22 +97,22 @@
               "readOnly": true
             }
           },
-          "inheritedFrom": "ArcBehaviors.PayloadParserBehavior"
+          "inheritedFrom": "ArcBehaviors.PayloadParserMixin"
         },
         {
           "name": "LT_RE",
-          "type": "RegExp",
+          "type": "?",
           "description": "Regexp to search for the `<` character",
           "privacy": "public",
           "sourceRange": {
-            "file": "bower_components/payload-parser-behavior/payload-parser-behavior.html",
+            "file": "../@advanced-rest-client/payload-parser-mixin/payload-parser-mixin.js",
             "start": {
-              "line": 59,
-              "column": 8
+              "line": 53,
+              "column": 4
             },
             "end": {
-              "line": 65,
-              "column": 9
+              "line": 55,
+              "column": 5
             }
           },
           "metadata": {
@@ -162,22 +120,22 @@
               "readOnly": true
             }
           },
-          "inheritedFrom": "ArcBehaviors.PayloadParserBehavior"
+          "inheritedFrom": "ArcBehaviors.PayloadParserMixin"
         },
         {
           "name": "SQUOT_RE",
-          "type": "RegExp",
+          "type": "?",
           "description": "Regexp to search for the `'` character",
           "privacy": "public",
           "sourceRange": {
-            "file": "bower_components/payload-parser-behavior/payload-parser-behavior.html",
+            "file": "../@advanced-rest-client/payload-parser-mixin/payload-parser-mixin.js",
             "start": {
-              "line": 67,
-              "column": 8
+              "line": 60,
+              "column": 4
             },
             "end": {
-              "line": 73,
-              "column": 9
+              "line": 62,
+              "column": 5
             }
           },
           "metadata": {
@@ -185,22 +143,22 @@
               "readOnly": true
             }
           },
-          "inheritedFrom": "ArcBehaviors.PayloadParserBehavior"
+          "inheritedFrom": "ArcBehaviors.PayloadParserMixin"
         },
         {
           "name": "QUOT_RE",
-          "type": "RegExp",
+          "type": "?",
           "description": "Regexp to search for the `\"` character",
           "privacy": "public",
           "sourceRange": {
-            "file": "bower_components/payload-parser-behavior/payload-parser-behavior.html",
+            "file": "../@advanced-rest-client/payload-parser-mixin/payload-parser-mixin.js",
             "start": {
-              "line": 75,
-              "column": 8
+              "line": 67,
+              "column": 4
             },
             "end": {
-              "line": 81,
-              "column": 9
+              "line": 69,
+              "column": 5
             }
           },
           "metadata": {
@@ -208,487 +166,157 @@
               "readOnly": true
             }
           },
-          "inheritedFrom": "ArcBehaviors.PayloadParserBehavior"
+          "inheritedFrom": "ArcBehaviors.PayloadParserMixin"
         },
         {
           "name": "value",
-          "type": "string",
+          "type": "string | null | undefined",
           "description": "Raw payload value",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 94,
-              "column": 8
+              "line": 103,
+              "column": 6
             },
             "end": {
-              "line": 98,
-              "column": 9
+              "line": 107,
+              "column": 7
             }
           },
           "metadata": {
             "polymer": {
               "notify": true,
-              "observer": "\"_valueChanged\""
+              "observer": "\"_valueChanged\"",
+              "attributeType": "String"
             }
           }
         },
         {
           "name": "contentType",
-          "type": "string",
+          "type": "string | null | undefined",
           "description": "Content-Type header value. Determines current code mirror mode.",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 102,
-              "column": 8
+              "line": 111,
+              "column": 6
             },
             "end": {
-              "line": 105,
-              "column": 9
+              "line": 114,
+              "column": 7
             }
           },
           "metadata": {
             "polymer": {
-              "observer": "\"_onContentTypeChanged\""
+              "observer": "\"_onContentTypeChanged\"",
+              "attributeType": "String"
             }
           }
         },
         {
           "name": "encodeEnabled",
-          "type": "boolean",
+          "type": "boolean | null | undefined",
           "description": "Computed value, true if `contentType` contains `x-www-form-urlencoded`",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 107,
-              "column": 8
+              "line": 116,
+              "column": 6
             },
             "end": {
-              "line": 111,
-              "column": 9
+              "line": 120,
+              "column": 7
             }
           },
           "metadata": {
             "polymer": {
-              "readOnly": true
+              "readOnly": true,
+              "attributeType": "Boolean"
             }
           },
           "defaultValue": "false"
         },
         {
           "name": "isJson",
-          "type": "boolean",
+          "type": "boolean | null | undefined",
           "description": "Computed value, true if `contentType` contains `/json`",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 113,
-              "column": 8
+              "line": 122,
+              "column": 6
             },
             "end": {
-              "line": 117,
-              "column": 9
+              "line": 126,
+              "column": 7
             }
           },
           "metadata": {
             "polymer": {
-              "readOnly": true
+              "readOnly": true,
+              "attributeType": "Boolean"
             }
           },
           "defaultValue": "false"
-        },
-        {
-          "name": "_cmGutters",
-          "type": "Array",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 118,
-              "column": 8
-            },
-            "end": {
-              "line": 121,
-              "column": 9
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          },
-          "defaultValue": "[\"CodeMirror-lint-markers\"]"
-        },
-        {
-          "name": "_lintObject",
-          "type": "Object",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 122,
-              "column": 8
-            },
-            "end": {
-              "line": 127,
-              "column": 9
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          },
-          "defaultValue": "false"
-        },
-        {
-          "name": "_customStylesList",
-          "type": "Array",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 128,
-              "column": 8
-            },
-            "end": {
-              "line": 128,
-              "column": 32
-            }
-          },
-          "metadata": {
-            "polymer": {}
-          }
         }
       ],
       "methods": [
-        {
-          "name": "created",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 55,
-              "column": 4
-            },
-            "end": {
-              "line": 60,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "attached",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 62,
-              "column": 4
-            },
-            "end": {
-              "line": 64,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "detached",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 66,
-              "column": 4
-            },
-            "end": {
-              "line": 74,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "notifyResize",
-          "description": "Can be called to manually notify a resizable and its descendant\nresizables of a resize change.",
-          "privacy": "public",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 80,
-              "column": 4
-            },
-            "end": {
-              "line": 92,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "assignParentResizable",
-          "description": "Used to assign the closest resizable ancestor to this resizable\nif the ancestor detects a request for notifications.",
-          "privacy": "public",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 98,
-              "column": 4
-            },
-            "end": {
-              "line": 100,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "parentResizable"
-            }
-          ],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "stopResizeNotificationsFor",
-          "description": "Used to remove a resizable descendant from the list of descendants\nthat should be notified of a resize change.",
-          "privacy": "public",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 106,
-              "column": 4
-            },
-            "end": {
-              "line": 113,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "target"
-            }
-          ],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "resizerShouldNotify",
-          "description": "This method can be overridden to filter nested elements that should or\nshould not be notified by the current element. Return true if an element\nshould be notified, or false if it should not be notified.",
-          "privacy": "public",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 124,
-              "column": 4
-            },
-            "end": {
-              "line": 124,
-              "column": 59
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "element",
-              "type": "HTMLElement",
-              "description": "A candidate descendant element that\nimplements `IronResizableBehavior`."
-            }
-          ],
-          "return": {
-            "type": "boolean",
-            "desc": "True if the `element` should be notified of resize."
-          },
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "_onDescendantIronResize",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 126,
-              "column": 4
-            },
-            "end": {
-              "line": 138,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "event"
-            }
-          ],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "_fireResize",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 140,
-              "column": 4
-            },
-            "end": {
-              "line": 145,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "_onIronRequestResizeNotifications",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 147,
-              "column": 4
-            },
-            "end": {
-              "line": 162,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "event"
-            }
-          ],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "_parentResizableChanged",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 164,
-              "column": 4
-            },
-            "end": {
-              "line": 168,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "parentResizable"
-            }
-          ],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "_notifyDescendant",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 170,
-              "column": 4
-            },
-            "end": {
-              "line": 181,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "descendant"
-            }
-          ],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
-        {
-          "name": "_requestResizeNotifications",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "file": "bower_components/iron-resizable-behavior/iron-resizable-behavior.html",
-            "start": {
-              "line": 183,
-              "column": 4
-            },
-            "end": {
-              "line": 211,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [],
-          "inheritedFrom": "Polymer.IronResizableBehavior"
-        },
         {
           "name": "connectedCallback",
           "description": "",
           "privacy": "public",
           "sourceRange": {
-            "file": "bower_components/events-target-behavior/events-target-behavior.html",
+            "file": "../@advanced-rest-client/events-target-mixin/events-target-mixin.js",
             "start": {
-              "line": 81,
+              "line": 72,
               "column": 4
             },
             "end": {
-              "line": 84,
+              "line": 75,
               "column": 6
             }
           },
           "metadata": {},
           "params": [],
-          "inheritedFrom": "ArcBehaviors.EventsTargetBehavior"
+          "return": {
+            "type": "void"
+          },
+          "inheritedFrom": "EventsTargetMixin"
         },
         {
           "name": "disconnectedCallback",
           "description": "",
           "privacy": "public",
           "sourceRange": {
-            "file": "bower_components/events-target-behavior/events-target-behavior.html",
+            "file": "../@advanced-rest-client/events-target-mixin/events-target-mixin.js",
             "start": {
-              "line": 86,
+              "line": 77,
               "column": 5
             },
             "end": {
-              "line": 91,
+              "line": 82,
               "column": 6
             }
           },
           "metadata": {},
           "params": [],
-          "inheritedFrom": "ArcBehaviors.EventsTargetBehavior"
+          "return": {
+            "type": "void"
+          },
+          "inheritedFrom": "EventsTargetMixin"
         },
         {
           "name": "_eventsTargetChanged",
           "description": "Removes old handlers (if any) and attaches listeners on new event\nevent target.",
           "privacy": "protected",
           "sourceRange": {
-            "file": "bower_components/events-target-behavior/events-target-behavior.html",
+            "file": "../@advanced-rest-client/events-target-mixin/events-target-mixin.js",
             "start": {
-              "line": 99,
+              "line": 90,
               "column": 4
             },
             "end": {
-              "line": 105,
+              "line": 96,
               "column": 5
             }
           },
@@ -700,7 +328,10 @@
               "description": "Event target to set handlers on. If not set it\nwill set handlers on the `window` object."
             }
           ],
-          "inheritedFrom": "ArcBehaviors.EventsTargetBehavior"
+          "return": {
+            "type": "void"
+          },
+          "inheritedFrom": "EventsTargetMixin"
         },
         {
           "name": "_attachListeners",
@@ -708,12 +339,12 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 138,
-              "column": 4
+              "line": 136,
+              "column": 2
             },
             "end": {
-              "line": 141,
-              "column": 5
+              "line": 139,
+              "column": 3
             }
           },
           "metadata": {},
@@ -721,7 +352,10 @@
             {
               "name": "node"
             }
-          ]
+          ],
+          "return": {
+            "type": "void"
+          }
         },
         {
           "name": "_detachListeners",
@@ -729,12 +363,12 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 143,
-              "column": 4
+              "line": 141,
+              "column": 2
             },
             "end": {
-              "line": 146,
-              "column": 5
+              "line": 144,
+              "column": 3
             }
           },
           "metadata": {},
@@ -742,20 +376,23 @@
             {
               "name": "node"
             }
-          ]
+          ],
+          "return": {
+            "type": "void"
+          }
         },
         {
           "name": "htmlEscape",
           "description": "Escape HTML to save HTML text.",
           "privacy": "public",
           "sourceRange": {
-            "file": "bower_components/payload-parser-behavior/payload-parser-behavior.html",
+            "file": "../@advanced-rest-client/payload-parser-mixin/payload-parser-mixin.js",
             "start": {
-              "line": 90,
+              "line": 76,
               "column": 4
             },
             "end": {
-              "line": 107,
+              "line": 93,
               "column": 5
             }
           },
@@ -767,20 +404,23 @@
               "description": "A HTML string to be escaped."
             }
           ],
-          "inheritedFrom": "ArcBehaviors.PayloadParserBehavior"
+          "return": {
+            "type": "String"
+          },
+          "inheritedFrom": "ArcBehaviors.PayloadParserMixin"
         },
         {
           "name": "formArrayToString",
           "description": "Parse input array to string x-www-form-urlencoded.\n\nNote that this function doesn't encodes the name and value. Use\n`this.formArrayToString(this.encodeUrlEncoded(arr))`\nto create a encoded string from the array.",
           "privacy": "public",
           "sourceRange": {
-            "file": "bower_components/payload-parser-behavior/payload-parser-behavior.html",
+            "file": "../@advanced-rest-client/payload-parser-mixin/payload-parser-mixin.js",
             "start": {
-              "line": 119,
+              "line": 105,
               "column": 4
             },
             "end": {
-              "line": 131,
+              "line": 117,
               "column": 5
             }
           },
@@ -796,20 +436,20 @@
             "type": "String",
             "desc": "A parsed string of `name`=`value` pairs of the input objects."
           },
-          "inheritedFrom": "ArcBehaviors.PayloadParserBehavior"
+          "inheritedFrom": "ArcBehaviors.PayloadParserMixin"
         },
         {
           "name": "_modelItemToFormDataString",
           "description": "Creates a form data string for a single item.",
           "privacy": "protected",
           "sourceRange": {
-            "file": "bower_components/payload-parser-behavior/payload-parser-behavior.html",
+            "file": "../@advanced-rest-client/payload-parser-mixin/payload-parser-mixin.js",
             "start": {
-              "line": 137,
+              "line": 123,
               "column": 4
             },
             "end": {
-              "line": 149,
+              "line": 141,
               "column": 5
             }
           },
@@ -825,20 +465,20 @@
             "type": "String",
             "desc": "Generated value string for x-www-form-urlencoded form."
           },
-          "inheritedFrom": "ArcBehaviors.PayloadParserBehavior"
+          "inheritedFrom": "ArcBehaviors.PayloadParserMixin"
         },
         {
           "name": "stringToArray",
           "description": "Parse input string to array of x-www-form-urlencoded form parameters.\n\nThis function will not url-decode names and values. Please, use\n`this.decodeUrlEncoded(this.stringToArray(str))` to create an array\nof decoded parameters.",
           "privacy": "public",
           "sourceRange": {
-            "file": "bower_components/payload-parser-behavior/payload-parser-behavior.html",
+            "file": "../@advanced-rest-client/payload-parser-mixin/payload-parser-mixin.js",
             "start": {
-              "line": 161,
+              "line": 152,
               "column": 4
             },
             "end": {
-              "line": 175,
+              "line": 166,
               "column": 5
             }
           },
@@ -854,20 +494,20 @@
             "type": "Array.<Object>",
             "desc": "An array of params with `name` and `value` keys."
           },
-          "inheritedFrom": "ArcBehaviors.PayloadParserBehavior"
+          "inheritedFrom": "ArcBehaviors.PayloadParserMixin"
         },
         {
           "name": "_createParamsArray",
           "description": "Converts a string to an array with objects containing name and value keys",
           "privacy": "protected",
           "sourceRange": {
-            "file": "bower_components/payload-parser-behavior/payload-parser-behavior.html",
+            "file": "../@advanced-rest-client/payload-parser-mixin/payload-parser-mixin.js",
             "start": {
-              "line": 181,
+              "line": 172,
               "column": 4
             },
             "end": {
-              "line": 218,
+              "line": 209,
               "column": 5
             }
           },
@@ -883,20 +523,20 @@
             "type": "Array.<Object>",
             "desc": "An array of params with `name` and `value` keys."
           },
-          "inheritedFrom": "ArcBehaviors.PayloadParserBehavior"
+          "inheritedFrom": "ArcBehaviors.PayloadParserMixin"
         },
         {
           "name": "_appendArrayResult",
           "description": "Appends form data parameter to an array.\nIf the parameter already exists in the array it creates an array for\nthe value onstead of appending the same parameter.",
           "privacy": "protected",
           "sourceRange": {
-            "file": "bower_components/payload-parser-behavior/payload-parser-behavior.html",
+            "file": "../@advanced-rest-client/payload-parser-mixin/payload-parser-mixin.js",
             "start": {
-              "line": 229,
+              "line": 220,
               "column": 4
             },
             "end": {
-              "line": 245,
+              "line": 236,
               "column": 5
             }
           },
@@ -922,20 +562,20 @@
             "type": "Array",
             "desc": "Updated array"
           },
-          "inheritedFrom": "ArcBehaviors.PayloadParserBehavior"
+          "inheritedFrom": "ArcBehaviors.PayloadParserMixin"
         },
         {
           "name": "encodeUrlEncoded",
           "description": "Encode payload to x-www-form-urlencoded string.",
           "privacy": "public",
           "sourceRange": {
-            "file": "bower_components/payload-parser-behavior/payload-parser-behavior.html",
+            "file": "../@advanced-rest-client/payload-parser-mixin/payload-parser-mixin.js",
             "start": {
-              "line": 251,
+              "line": 243,
               "column": 4
             },
             "end": {
-              "line": 267,
+              "line": 259,
               "column": 5
             }
           },
@@ -947,20 +587,23 @@
               "description": "An input data."
             }
           ],
-          "inheritedFrom": "ArcBehaviors.PayloadParserBehavior"
+          "return": {
+            "type": "(Array.<object> | String)"
+          },
+          "inheritedFrom": "ArcBehaviors.PayloadParserMixin"
         },
         {
           "name": "_encodeValue",
           "description": "URL encodes a value.",
           "privacy": "protected",
           "sourceRange": {
-            "file": "bower_components/payload-parser-behavior/payload-parser-behavior.html",
+            "file": "../@advanced-rest-client/payload-parser-mixin/payload-parser-mixin.js",
             "start": {
-              "line": 275,
+              "line": 267,
               "column": 4
             },
             "end": {
-              "line": 283,
+              "line": 275,
               "column": 5
             }
           },
@@ -976,20 +619,20 @@
             "type": "(String | Array.<String>)",
             "desc": "Encoded value. The same type as the input."
           },
-          "inheritedFrom": "ArcBehaviors.PayloadParserBehavior"
+          "inheritedFrom": "ArcBehaviors.PayloadParserMixin"
         },
         {
           "name": "decodeUrlEncoded",
           "description": "Decode x-www-form-urlencoded data.",
           "privacy": "public",
           "sourceRange": {
-            "file": "bower_components/payload-parser-behavior/payload-parser-behavior.html",
+            "file": "../@advanced-rest-client/payload-parser-mixin/payload-parser-mixin.js",
             "start": {
-              "line": 289,
+              "line": 282,
               "column": 4
             },
             "end": {
-              "line": 305,
+              "line": 298,
               "column": 5
             }
           },
@@ -1001,20 +644,23 @@
               "description": "An input data."
             }
           ],
-          "inheritedFrom": "ArcBehaviors.PayloadParserBehavior"
+          "return": {
+            "type": "(Array.<object> | String)"
+          },
+          "inheritedFrom": "ArcBehaviors.PayloadParserMixin"
         },
         {
           "name": "_decodeValue",
           "description": "URL decodes a value.",
           "privacy": "protected",
           "sourceRange": {
-            "file": "bower_components/payload-parser-behavior/payload-parser-behavior.html",
+            "file": "../@advanced-rest-client/payload-parser-mixin/payload-parser-mixin.js",
             "start": {
-              "line": 313,
+              "line": 306,
               "column": 4
             },
             "end": {
-              "line": 321,
+              "line": 314,
               "column": 5
             }
           },
@@ -1030,20 +676,20 @@
             "type": "(String | Array.<String>)",
             "desc": "Decoded value. The same type as the input."
           },
-          "inheritedFrom": "ArcBehaviors.PayloadParserBehavior"
+          "inheritedFrom": "ArcBehaviors.PayloadParserMixin"
         },
         {
           "name": "_paramValue",
           "description": "Parse input string as a payload param key or value.",
           "privacy": "protected",
           "sourceRange": {
-            "file": "bower_components/payload-parser-behavior/payload-parser-behavior.html",
+            "file": "../@advanced-rest-client/payload-parser-mixin/payload-parser-mixin.js",
             "start": {
-              "line": 327,
+              "line": 321,
               "column": 4
             },
             "end": {
-              "line": 334,
+              "line": 328,
               "column": 5
             }
           },
@@ -1055,20 +701,23 @@
               "description": "An input to parse."
             }
           ],
-          "inheritedFrom": "ArcBehaviors.PayloadParserBehavior"
+          "return": {
+            "type": "String"
+          },
+          "inheritedFrom": "ArcBehaviors.PayloadParserMixin"
         },
         {
           "name": "_paramLineToFormObject",
           "description": "Parse a line of key=value http params into an object with `name` and `value` keys.",
           "privacy": "protected",
           "sourceRange": {
-            "file": "bower_components/payload-parser-behavior/payload-parser-behavior.html",
+            "file": "../@advanced-rest-client/payload-parser-mixin/payload-parser-mixin.js",
             "start": {
-              "line": 342,
+              "line": 336,
               "column": 4
             },
             "end": {
-              "line": 361,
+              "line": 355,
               "column": 5
             }
           },
@@ -1084,20 +733,20 @@
             "type": "Object",
             "desc": "A parsed object with `name` and `value` keys."
           },
-          "inheritedFrom": "ArcBehaviors.PayloadParserBehavior"
+          "inheritedFrom": "ArcBehaviors.PayloadParserMixin"
         },
         {
           "name": "encodeQueryString",
           "description": "Returns a string where all characters that are not valid for a URL\ncomponent have been escaped. The escaping of a character is done by\nconverting it into its UTF-8 encoding and then encoding each of the\nresulting bytes as a %xx hexadecimal escape sequence.\n\nNote: this method will convert any space character into its escape\nshort form, '+' rather than %20. It should therefore only be used for\nquery-string parts.\n\nThe following character sets are **not** escaped by this method:\n- ASCII digits or letters\n- ASCII punctuation characters: ```- _ . ! ~ * ' ( )</pre>```\n\nNotice that this method <em>does</em> encode the URL component delimiter\ncharacters:<blockquote>\n\n```\n; / ? : & = + $ , #\n```",
           "privacy": "public",
           "sourceRange": {
-            "file": "bower_components/payload-parser-behavior/payload-parser-behavior.html",
+            "file": "../@advanced-rest-client/payload-parser-mixin/payload-parser-mixin.js",
             "start": {
-              "line": 386,
+              "line": 380,
               "column": 4
             },
             "end": {
-              "line": 392,
+              "line": 386,
               "column": 5
             }
           },
@@ -1113,20 +762,20 @@
             "type": "String",
             "desc": "a string with all invalid URL characters escaped"
           },
-          "inheritedFrom": "ArcBehaviors.PayloadParserBehavior"
+          "inheritedFrom": "ArcBehaviors.PayloadParserMixin"
         },
         {
           "name": "decodeQueryString",
           "description": "Returns a string where all URL component escape sequences have been\nconverted back to their original character representations.\n\nNote: this method will convert the space character escape short form, '+',\ninto a space. It should therefore only be used for query-string parts.",
           "privacy": "public",
           "sourceRange": {
-            "file": "bower_components/payload-parser-behavior/payload-parser-behavior.html",
+            "file": "../@advanced-rest-client/payload-parser-mixin/payload-parser-mixin.js",
             "start": {
-              "line": 403,
+              "line": 397,
               "column": 4
             },
             "end": {
-              "line": 409,
+              "line": 403,
               "column": 5
             }
           },
@@ -1142,7 +791,7 @@
             "type": "String",
             "desc": "string with no encoded URL component encoded sequences"
           },
-          "inheritedFrom": "ArcBehaviors.PayloadParserBehavior"
+          "inheritedFrom": "ArcBehaviors.PayloadParserMixin"
         },
         {
           "name": "ready",
@@ -1150,16 +799,19 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 148,
-              "column": 4
+              "line": 146,
+              "column": 2
             },
             "end": {
-              "line": 151,
-              "column": 5
+              "line": 149,
+              "column": 3
             }
           },
           "metadata": {},
-          "params": []
+          "params": [],
+          "return": {
+            "type": "void"
+          }
         },
         {
           "name": "refresh",
@@ -1167,16 +819,19 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 157,
-              "column": 4
+              "line": 155,
+              "column": 2
             },
             "end": {
-              "line": 163,
-              "column": 5
+              "line": 157,
+              "column": 3
             }
           },
           "metadata": {},
-          "params": []
+          "params": [],
+          "return": {
+            "type": "void"
+          }
         },
         {
           "name": "_onContentTypeChanged",
@@ -1184,20 +839,24 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 168,
-              "column": 4
+              "line": 164,
+              "column": 2
             },
             "end": {
-              "line": 177,
-              "column": 5
+              "line": 173,
+              "column": 3
             }
           },
           "metadata": {},
           "params": [
             {
-              "name": "ct"
+              "name": "ct",
+              "type": "String"
             }
-          ]
+          ],
+          "return": {
+            "type": "void"
+          }
         },
         {
           "name": "_computeEncodeEnabled",
@@ -1205,12 +864,12 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 179,
-              "column": 4
+              "line": 175,
+              "column": 2
             },
             "end": {
-              "line": 181,
-              "column": 5
+              "line": 177,
+              "column": 3
             }
           },
           "metadata": {},
@@ -1226,12 +885,12 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 183,
-              "column": 4
+              "line": 179,
+              "column": 2
             },
             "end": {
-              "line": 185,
-              "column": 5
+              "line": 181,
+              "column": 3
             }
           },
           "metadata": {},
@@ -1247,12 +906,12 @@
           "privacy": "private",
           "sourceRange": {
             "start": {
-              "line": 187,
-              "column": 4
+              "line": 183,
+              "column": 2
             },
             "end": {
-              "line": 195,
-              "column": 5
+              "line": 191,
+              "column": 3
             }
           },
           "metadata": {},
@@ -1271,12 +930,12 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 202,
-              "column": 4
+              "line": 198,
+              "column": 2
             },
             "end": {
-              "line": 205,
-              "column": 5
+              "line": 201,
+              "column": 3
             }
           },
           "metadata": {},
@@ -1285,7 +944,10 @@
               "name": "e",
               "type": "CustomEvent"
             }
-          ]
+          ],
+          "return": {
+            "type": "void"
+          }
         },
         {
           "name": "_valueChanged",
@@ -1293,20 +955,24 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 210,
-              "column": 4
+              "line": 208,
+              "column": 2
             },
             "end": {
-              "line": 215,
-              "column": 5
+              "line": 213,
+              "column": 3
             }
           },
           "metadata": {},
           "params": [
             {
-              "name": "value"
+              "name": "value",
+              "type": "String"
             }
-          ]
+          ],
+          "return": {
+            "type": "void"
+          }
         },
         {
           "name": "_editorValueChanged",
@@ -1314,12 +980,12 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 221,
-              "column": 4
+              "line": 219,
+              "column": 2
             },
             "end": {
-              "line": 226,
-              "column": 5
+              "line": 224,
+              "column": 3
             }
           },
           "metadata": {},
@@ -1328,7 +994,10 @@
               "name": "e",
               "type": "CustomEvent"
             }
-          ]
+          ],
+          "return": {
+            "type": "void"
+          }
         },
         {
           "name": "_onPaste",
@@ -1337,19 +1006,23 @@
           "sourceRange": {
             "start": {
               "line": 232,
-              "column": 4
+              "column": 2
             },
             "end": {
               "line": 251,
-              "column": 5
+              "column": 3
             }
           },
           "metadata": {},
           "params": [
             {
-              "name": "e"
+              "name": "e",
+              "type": "Event"
             }
-          ]
+          ],
+          "return": {
+            "type": "void"
+          }
         },
         {
           "name": "_cancelPaste",
@@ -1358,11 +1031,11 @@
           "sourceRange": {
             "start": {
               "line": 258,
-              "column": 4
+              "column": 2
             },
             "end": {
               "line": 286,
-              "column": 5
+              "column": 3
             }
           },
           "metadata": {},
@@ -1385,11 +1058,11 @@
           "sourceRange": {
             "start": {
               "line": 288,
-              "column": 4
+              "column": 2
             },
             "end": {
-              "line": 301,
-              "column": 5
+              "line": 299,
+              "column": 3
             }
           },
           "metadata": {},
@@ -1397,7 +1070,10 @@
             {
               "name": "ct"
             }
-          ]
+          ],
+          "return": {
+            "type": "void"
+          }
         },
         {
           "name": "formatValue",
@@ -1405,16 +1081,19 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 305,
-              "column": 4
+              "line": 303,
+              "column": 2
             },
             "end": {
-              "line": 316,
-              "column": 5
+              "line": 314,
+              "column": 3
             }
           },
           "metadata": {},
-          "params": []
+          "params": [],
+          "return": {
+            "type": "void"
+          }
         },
         {
           "name": "minifyValue",
@@ -1422,16 +1101,19 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 320,
-              "column": 4
+              "line": 318,
+              "column": 2
             },
             "end": {
-              "line": 331,
-              "column": 5
+              "line": 329,
+              "column": 3
             }
           },
           "metadata": {},
-          "params": []
+          "params": [],
+          "return": {
+            "type": "void"
+          }
         },
         {
           "name": "_resizeHandler",
@@ -1439,16 +1121,19 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 333,
-              "column": 4
+              "line": 331,
+              "column": 2
             },
             "end": {
-              "line": 335,
-              "column": 5
+              "line": 333,
+              "column": 3
             }
           },
           "metadata": {},
-          "params": []
+          "params": [],
+          "return": {
+            "type": "void"
+          }
         },
         {
           "name": "encodeValue",
@@ -1456,16 +1141,19 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 341,
-              "column": 4
+              "line": 339,
+              "column": 2
             },
             "end": {
-              "line": 346,
-              "column": 5
+              "line": 344,
+              "column": 3
             }
           },
           "metadata": {},
-          "params": []
+          "params": [],
+          "return": {
+            "type": "void"
+          }
         },
         {
           "name": "decodeValue",
@@ -1473,16 +1161,19 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 351,
-              "column": 4
+              "line": 349,
+              "column": 2
             },
             "end": {
-              "line": 356,
-              "column": 5
+              "line": 354,
+              "column": 3
             }
           },
           "metadata": {},
-          "params": []
+          "params": [],
+          "return": {
+            "type": "void"
+          }
         }
       ],
       "staticMethods": [],
@@ -1495,12 +1186,12 @@
       "metadata": {},
       "sourceRange": {
         "start": {
-          "line": 85,
-          "column": 2
+          "line": 53,
+          "column": 0
         },
         "end": {
-          "line": 357,
-          "column": 3
+          "line": 355,
+          "column": 1
         }
       },
       "privacy": "public",
@@ -1511,83 +1202,83 @@
           "name": "events-target",
           "description": "Events handlers target. By default the element listens on\n`window` object. If set, all events listeners will be attached to this\nobject instead of `window`.",
           "sourceRange": {
-            "file": "bower_components/events-target-behavior/events-target-behavior.html",
+            "file": "../@advanced-rest-client/events-target-mixin/events-target-mixin.js",
             "start": {
-              "line": 73,
+              "line": 64,
               "column": 8
             },
             "end": {
-              "line": 76,
+              "line": 67,
               "column": 9
             }
           },
           "metadata": {},
-          "type": "Object",
-          "inheritedFrom": "ArcBehaviors.EventsTargetBehavior"
+          "type": "Object | null | undefined",
+          "inheritedFrom": "EventsTargetMixin"
         },
         {
           "name": "value",
           "description": "Raw payload value",
           "sourceRange": {
             "start": {
-              "line": 94,
-              "column": 8
+              "line": 103,
+              "column": 6
             },
             "end": {
-              "line": 98,
-              "column": 9
+              "line": 107,
+              "column": 7
             }
           },
           "metadata": {},
-          "type": "string"
+          "type": "string | null | undefined"
         },
         {
           "name": "content-type",
           "description": "Content-Type header value. Determines current code mirror mode.",
           "sourceRange": {
             "start": {
-              "line": 102,
-              "column": 8
+              "line": 111,
+              "column": 6
             },
             "end": {
-              "line": 105,
-              "column": 9
+              "line": 114,
+              "column": 7
             }
           },
           "metadata": {},
-          "type": "string"
+          "type": "string | null | undefined"
         },
         {
           "name": "encode-enabled",
           "description": "Computed value, true if `contentType` contains `x-www-form-urlencoded`",
           "sourceRange": {
             "start": {
-              "line": 107,
-              "column": 8
+              "line": 116,
+              "column": 6
             },
             "end": {
-              "line": 111,
-              "column": 9
+              "line": 120,
+              "column": 7
             }
           },
           "metadata": {},
-          "type": "boolean"
+          "type": "boolean | null | undefined"
         },
         {
           "name": "is-json",
           "description": "Computed value, true if `contentType` contains `/json`",
           "sourceRange": {
             "start": {
-              "line": 113,
-              "column": 8
+              "line": 122,
+              "column": 6
             },
             "end": {
-              "line": 117,
-              "column": 9
+              "line": 126,
+              "column": 7
             }
           },
           "metadata": {},
-          "type": "boolean"
+          "type": "boolean | null | undefined"
         }
       ],
       "events": [
@@ -1605,9 +1296,8 @@
       "slots": [],
       "tagname": "raw-payload-editor",
       "mixins": [
-        "Polymer.IronResizableBehavior",
-        "ArcBehaviors.EventsTargetBehavior",
-        "ArcBehaviors.PayloadParserBehavior"
+        "EventsTargetMixin",
+        "PayloadParserMixin"
       ]
     }
   ]
