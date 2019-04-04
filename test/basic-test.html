@@ -4,11 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
 
-    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-    <script src="../node_modules/@polymer/test-fixture/test-fixture.js"></script>
-    <script src="../node_modules/mocha/mocha.js"></script>
-    <script src="../node_modules/chai/chai.js"></script>
-    <script src="../node_modules/wct-mocha/wct-mocha.js"></script>
+    <script src="../../../@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+    <script src="../../../@polymer/test-fixture/test-fixture.js"></script>
+    <script src="../../../mocha/mocha.js"></script>
+    <script src="../../../chai/chai.js"></script>
+    <script src="../../../wct-mocha/wct-mocha.js"></script>
 
     <script src="../../../jsonlint/lib/jsonlint.js"></script>
     <script src="../../../codemirror/lib/codemirror.js"></script>
@@ -36,7 +36,7 @@
 
     <script type="module">
     import '../raw-payload-editor.js';
-    import {tap} from '@polymer/iron-test-helpers/mock-interactions.js';
+    import {tap} from '../../../@polymer/iron-test-helpers/mock-interactions.js';
     function fire(name, detail, node) {
       const event = new CustomEvent(name, {
         bubbles: true,

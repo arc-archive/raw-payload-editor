@@ -11,16 +11,16 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 */
-import {PolymerElement} from '@polymer/polymer/polymer-element.js';
-import {IronResizableBehavior} from '@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
-import {html} from '@polymer/polymer/lib/utils/html-tag.js';
-import {mixinBehaviors} from '@polymer/polymer/lib/legacy/class.js';
-import {EventsTargetMixin} from '@advanced-rest-client/events-target-mixin/events-target-mixin.js';
-import {PayloadParserMixin} from '@advanced-rest-client/payload-parser-mixin/payload-parser-mixin.js';
-import '@polymer/paper-toast/paper-toast.js';
-import '@polymer/paper-button/paper-button.js';
-import '@advanced-rest-client/code-mirror/code-mirror.js';
-import '@advanced-rest-client/code-mirror-linter/code-mirror-linter.js';
+import {PolymerElement} from '../../@polymer/polymer/polymer-element.js';
+import {IronResizableBehavior} from '../../@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
+import {html} from '../../@polymer/polymer/lib/utils/html-tag.js';
+import {mixinBehaviors} from '../../@polymer/polymer/lib/legacy/class.js';
+import {EventsTargetMixin} from '../../@advanced-rest-client/events-target-mixin/events-target-mixin.js';
+import {PayloadParserMixin} from '../../@advanced-rest-client/payload-parser-mixin/payload-parser-mixin.js';
+import '../../@polymer/paper-toast/paper-toast.js';
+import '../../@polymer/paper-button/paper-button.js';
+import '../../@advanced-rest-client/code-mirror/code-mirror.js';
+import '../../@advanced-rest-client/code-mirror-linter/code-mirror-linter.js';
 /**
  * A raw payload input editor based on CodeMirror.
  *
