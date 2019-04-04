@@ -18,16 +18,16 @@
     "@advanced-rest-client/content-type-selector": "^3.0.0-preview.1",
     "@polymer/gen-typescript-declarations": "^1.6.1",
     "@polymer/iron-component-page": "^4.0.0",
-    "@polymer/iron-demo-helpers": "^3.0.0",
+    "@polymer/iron-demo-helpers": "^3.1.0",
     "@polymer/iron-test-helpers": "^3.0.0",
     "@polymer/paper-checkbox": "^3.0.0",
     "@polymer/test-fixture": "^4.0.2",
     "@webcomponents/webcomponentsjs": "^2.0.0",
-    "web-animations-js": "^2.3.1",
     "chai": "^4.2.0",
     "mocha": "^5.2.0",
-    "sinon": "^7.2.3",
-    "wct-mocha": "^1.0.0"
+    "sinon": "^7.3.1",
+    "wct-mocha": "^1.0.0",
+    "web-animations-js": "^2.3.1"
   },
   "main": "raw-payload-editor.js",
   "authors": [
@@ -50,11 +50,11 @@
   ],
   "dependencies": {
     "@advanced-rest-client/code-mirror": "^3.0.0-preview.1",
-    "@advanced-rest-client/events-target-mixin": "^3.0.0-preview.1",
-    "@advanced-rest-client/payload-parser-mixin": "^3.0.0-preview.1",
+    "@advanced-rest-client/events-target-mixin": "^3.0.0-preview.3",
+    "@advanced-rest-client/payload-parser-mixin": "^3.0.0-preview.2",
     "@polymer/iron-resizable-behavior": "^3.0.0",
     "@polymer/paper-button": "^3.0.0",
     "@polymer/paper-toast": "^3.0.0",
-    "@polymer/polymer": "^3.0.0"
+    "@polymer/polymer": "^3.2.0"
   }
 }
