@@ -8,7 +8,54 @@
 
 An element with CodeMirror editor to allow the user to enter HTTP message body.
 
-**See breaking changes and list of required dependencies at the bottom of this document**
+
+
+## Breaking Changes in v3
+
+1.  Upgrade
+
+The element now uses LitElement library instead of Polymer. This means that all attributes are lowercase without `-` characters.
+For example, previously the `lineSeparator` property was reflected to `line-separator` attribute. Now it is `lineseparator` attribute.
+
+2.  Tab handling
+
+CodeMirror traps focus in the editor area. This is not accessible way of handling user input. Because of that this element overrides default tab key behavior
+and removes focus from the element.
+
+3.  Required imports
+
+This version uses latest and final specs for web components. This means the component works as a ES module. Because of that
+CodeMirror and any related library has to be included into the document before inserting this element to the DOM.
+CodeMirror 6 possibly will be working with ES imports but this is not set in stone at the moment.
+
+Below is the default set of scripts to be added to the document.
+
+```html
+<script src="node_modules/codemirror/lib/codemirror.js"></script>
+<script src="node_modules/codemirror/addon/mode/loadmode.js"></script>
+<script src="node_modules/codemirror/mode/meta.js"></script>
+<!--Default set of parsers -->
+<script src="node_modules/codemirror/mode/javascript/javascript.js"></script>
+<script src="node_modules/codemirror/mode/xml/xml.js"></script>
+<script src="node_modules/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+```
+
+If you are using JSON linter
+
+```html
+<script src="node_modules/jsonlint/lib/jsonlint.js"></script>
+<script src="node_modules/codemirror/addon/lint/lint.js"></script>
+<script src="node_modules/codemirror/addon/lint/json-lint.js"></script>
+<link rel="stylesheet" href="node_modules/codemirror/addon/lint/lint.css" />
+```
+
+Finally, if your application will use modes that aren't included in the document, you should set import URI. This will be used to resolve modes dependencies.
+
+```html
+<script>
+CodeMirror.modeURL = 'node_modules/codemirror/mode/%N/%N.js';
+</script>
+```
 
 ### API components
 
@@ -31,79 +78,54 @@ npm install --save @advanced-rest-client/raw-payload-editor
     </script>
   </head>
   <body>
-    <raw-payload-editor content-type="application/json"></raw-payload-editor>
+    <raw-payload-editor contenttype="application/json"></raw-payload-editor>
+    <script>
+    {
+      document.querySelector('raw-payload-editor').onvalue = (e) => {
+        console.log(e.target.value);
+      }
+    }
+    </script>
   </body>
 </html>
 ```
 
-### In a Polymer 3 element
+### In a LitElement
 
 ```js
-import {PolymerElement, html} from '@polymer/polymer';
-import '@advanced-rest-client/raw-payload-editor/raw-payload-editor.js';
+import { LitElement, html } from 'lit-element';
+import '@advanced-rest-client/code-mirror/code-mirror.js';
 
 class SampleElement extends PolymerElement {
-  static get template() {
+  render() {
     return html`
-    <raw-payload-editor content-type="application/json"></raw-payload-editor>
+    <code-mirror contenttype="application/json" @value-changed="${this._valueHandler}"></code-mirror>
     `;
+  }
+
+  _valueHandler(e) {
+    this.value = e.detail.value;
   }
 }
 customElements.define('sample-element', SampleElement);
 ```
 
-### Installation
+### development
 
 ```sh
 git clone https://github.com/advanced-rest-client/raw-payload-editor
-cd api-url-editor
+cd raw-payload-editor
 npm install
-npm install -g polymer-cli
 ```
 
 ### Running the demo locally
 
 ```sh
-polymer serve --npm
-open http://127.0.0.1:<port>/demo/
+npm start
 ```
 
 ### Running the tests
+
 ```sh
-polymer test --npm
+npm test
 ```
-
-## Breaking Changes in v3
-
-Due to completely different dependencies import algorithm the CodeMirror and it's dependencies has to
-be included to the web application manually, outside the component.
-
-Web Components are ES6 modules and libraries like CodeMirror are not adjusted to
-new spec. Therefore importing the library inside the component won't make it work
-(no reference is created).
-
-```html
-<!-- CodeMirror + modes loader -->
-<script src="node_modules/codemirror/lib/codemirror.js"></script>
-<script src="node_modules/codemirror/addon/mode/loadmode.js"></script>
-<script src="node_modules/codemirror/mode/meta.js"></script>
-<!--Default set of parsers, add as many as you need -->
-<script src="node_modules/codemirror/mode/javascript/javascript.js"></script>
-<script src="node_modules/codemirror/mode/xml/xml.js"></script>
-<script src="node_modules/codemirror/mode/htmlmixed/htmlmixed.js"></script>
-<!-- JSON linter -->
-<script src="node_modules/jsonlint/lib/jsonlint.js"></script>
-<script src="node_modules/codemirror/addon/lint/lint.js"></script>
-<script src="node_modules/codemirror/addon/lint/json-lint.js"></script>
-```
-Finally, you should set the path to CodeMirror modes. When content type change
-this path is used to load syntax highlighter. If you list all modes in the scripts
-above then this is not required.
-```html
-<script>
-CodeMirror.modeURL = 'node_modules/codemirror/mode/%N/%N.js';
-</script>
-```
-
-The `jsonlint` library is a dependency of `@advanced-rest-client/code-mirror-linter`
-already included in the dependency graph of this element.

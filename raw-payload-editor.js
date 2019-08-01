@@ -11,16 +11,15 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 */
-import {PolymerElement} from '../../@polymer/polymer/polymer-element.js';
-import {IronResizableBehavior} from '../../@polymer/iron-resizable-behavior/iron-resizable-behavior.js';
-import {html} from '../../@polymer/polymer/lib/utils/html-tag.js';
-import {mixinBehaviors} from '../../@polymer/polymer/lib/legacy/class.js';
-import {EventsTargetMixin} from '../../@advanced-rest-client/events-target-mixin/events-target-mixin.js';
-import {PayloadParserMixin} from '../../@advanced-rest-client/payload-parser-mixin/payload-parser-mixin.js';
-import '../../@polymer/paper-toast/paper-toast.js';
-import '../../@polymer/paper-button/paper-button.js';
-import '../../@advanced-rest-client/code-mirror/code-mirror.js';
-import '../../@advanced-rest-client/code-mirror-linter/code-mirror-linter.js';
+import { LitElement, html, css } from 'lit-element';
+import { ArcResizableMixin } from '@advanced-rest-client/arc-resizable-mixin/arc-resizable-mixin.js';
+import { EventsTargetMixin } from '@advanced-rest-client/events-target-mixin/events-target-mixin.js';
+import { PayloadParserMixin } from '@advanced-rest-client/payload-parser-mixin/payload-parser-mixin.js';
+import '@polymer/paper-toast/paper-toast.js';
+import '@polymer/paper-button/paper-button.js';
+import '@advanced-rest-client/code-mirror/code-mirror.js';
+import '@advanced-rest-client/code-mirror-linter/code-mirror-linter.js';
+import linterStyles from '@advanced-rest-client/code-mirror-linter/lint-style.js';
 /**
  * A raw payload input editor based on CodeMirror.
  *
@@ -51,81 +50,114 @@ import '../../@advanced-rest-client/code-mirror-linter/code-mirror-linter.js';
  * @appliesMixin EventsTargetMixin
  * @appliesMixin PayloadParserMixin
  */
-class RawPayloadEditor extends
-  mixinBehaviors([IronResizableBehavior], PayloadParserMixin(EventsTargetMixin(PolymerElement))) {
-  static get template() {
+class RawPayloadEditor extends ArcResizableMixin(PayloadParserMixin(EventsTargetMixin(LitElement))) {
+  static get styles() {
+    return [
+      linterStyles,
+      css`:host {
+        display: block;
+      }
+
+      .action-buttons {
+        margin: 8px 0;
+      }
+
+      *[hidden] {
+        display: none !important;
+      }`
+    ];
+  }
+
+  render() {
+    const { _encodeEnabled, _isJson } = this;
     return html`
-    <style>
-    :host {
-      display: block;
-      @apply --raw-payload-editor;
-    }
-
-    .action-buttons {
-      margin: 8px 0;
-      @apply --raw-payload-editor-encode-buttons;
-      @apply --raw-payload-editor-action-buttons;
-    }
-
-    *[hidden] {
-      display: none !important;
-    }
-    </style>
-    <template is="dom-if" if="[[encodeEnabled]]">
-      <div class="action-buttons" data-type="form">
-        <paper-button on-tap="encodeValue"
-          title="Encodes payload to x-www-form-urlencoded data">Encode payload</paper-button>
-        <paper-button on-tap="decodeValue"
-          title="Decodes payload to human readable form">Decode payload</paper-button>
-      </div>
-    </template>
-    <template is="dom-if" if="[[isJson]]">
-      <div class="action-buttons" data-type="json">
-        <paper-button on-tap="formatValue" data-action="format-json"
-          title="Formats JSON input.">Format JSON</paper-button>
-        <paper-button on-tap="minifyValue" data-action="minify-json"
-          title="Removed whitespaces from the input">Minify JSON</paper-button>
-      </div>
-    </template>
-    <code-mirror id="cm" mode="application/json" on-value-changed="_editorValueChanged"
-      on-paste="_onPaste" gutters='["CodeMirror-lint-markers"]'></code-mirror>
-    <paper-toast id="invalidJsonToast">JSON value is invalid. Cannot parse value.</paper-toast>
-`;
+    ${_encodeEnabled ? html`<div class="action-buttons" data-type="form">
+      <paper-button @click="${this.encodeValue}"
+        title="Encodes payload to x-www-form-urlencoded data">Encode payload</paper-button>
+      <paper-button @click="${this.decodeValue}"
+        title="Decodes payload to human readable form">Decode payload</paper-button>
+    </div>` : undefined}
+    ${_isJson ? html`<div class="action-buttons" data-type="json">
+      <paper-button @click="${this.formatValue}" data-action="format-json"
+        title="Formats JSON input.">Format JSON</paper-button>
+      <paper-button @click="${this.minifyValue}" data-action="minify-json"
+        title="Removed whitespaces from the input">Minify JSON</paper-button>
+    </div>` : undefined}
+    <code-mirror
+      mode="application/json"
+      @value-changed="${this._editorValueChanged}"
+      gutters='["CodeMirror-lint-markers"]'></code-mirror>
+    <paper-toast id="invalidJsonToast">JSON value is invalid. Cannot parse value.</paper-toast>`;
   }
 
-  static get is() {
-    return 'raw-payload-editor';
-  }
   static get properties() {
     return {
       /**
        * Raw payload value
        */
-      value: {
-        type: String,
-        notify: true,
-        observer: '_valueChanged'
-      },
+      value: { type: String },
       /**
        * Content-Type header value. Determines current code mirror mode.
        */
-      contentType: {
-        type: String,
-        observer: '_onContentTypeChanged'
-      },
+      contentType: { type: String },
       // Computed value, true if `contentType` contains `x-www-form-urlencoded`
-      encodeEnabled: {
-        type: Boolean,
-        computed: '_computeEncodeEnabled(contentType)',
-        value: false
-      },
+      _encodeEnabled: { type: Boolean },
       // Computed value, true if `contentType` contains `/json`
-      isJson: {
-        type: Boolean,
-        computed: '_computeIsJson(contentType)',
-        value: false
-      }
+      _isJson: { type: Boolean }
     };
+  }
+
+  get _editor() {
+    return this.shadowRoot.querySelector('code-mirror');
+  }
+
+  get value() {
+    return this._value;
+  }
+
+  set value(value) {
+    const old = this._value;
+    if (old === value) {
+      return;
+    }
+    this._value = value;
+    this._valueChanged(value);
+    this.dispatchEvent(new CustomEvent('value-changed', {
+      detail: {
+        value
+      }
+    }));
+  }
+
+  get contentType() {
+    return this._contentType;
+  }
+
+  set contentType(value) {
+    const old = this._contentType;
+    if (old === value) {
+      return;
+    }
+    this._contentType = value;
+    this._onContentTypeChanged(value);
+    this._encodeEnabled = this.__computeIs(value, 'x-www-form-urlencoded');
+    this._isJson = this._computeIsJson(value);
+  }
+
+  get onvalue() {
+    return this._onValue;
+  }
+
+  set onvalue(value) {
+    if (this._onValue) {
+      this.removeEventListener('value-changed', this._onValue);
+    }
+    if (typeof value !== 'function') {
+      this._onValue = null;
+      return;
+    }
+    this._onValue = value;
+    this.addEventListener('value-changed', this._onValue);
   }
 
   constructor() {
@@ -144,9 +176,11 @@ class RawPayloadEditor extends
     this.removeEventListener('iron-resize', this._resizeHandler);
   }
 
-  ready() {
-    super.ready();
+  firstUpdated() {
     this.refresh();
+    if (this.contentType) {
+      this._onContentTypeChanged(this.contentType);
+    }
   }
 
   /**
@@ -154,7 +188,7 @@ class RawPayloadEditor extends
    * Should be used to when the element becomes visible after being hidden.
    */
   refresh() {
-    this.$.cm.refresh();
+    this._editor.refresh();
   }
 
   /**
@@ -163,6 +197,10 @@ class RawPayloadEditor extends
    * @param {String} ct
    */
   _onContentTypeChanged(ct) {
+    const editor = this._editor;
+    if (!editor) {
+      return;
+    }
     this._setupLinter(ct);
     if (!ct) {
       return;
@@ -170,11 +208,7 @@ class RawPayloadEditor extends
     if (ct.indexOf && ct.indexOf(';') !== -1) {
       ct = ct.substr(0, ct.indexOf(';'));
     }
-    this.shadowRoot.querySelector('code-mirror').mode = ct;
-  }
-  // Computes `encodeEnabled` based on content type.
-  _computeEncodeEnabled(ct) {
-    return this.__computeIs(ct, 'x-www-form-urlencoded');
+    this._editor.mode = ct;
   }
 
   _computeIsJson(ct) {
@@ -197,8 +231,7 @@ class RawPayloadEditor extends
    * @param {CustomEvent} e
    */
   _contentTypeHandler(e) {
-    const ct = e.detail.value;
-    this.set('contentType', ct);
+    this.contentType = e.detail.value;
   }
   /**
    * Handler for value change.
@@ -210,7 +243,7 @@ class RawPayloadEditor extends
     if (this.__editorValueChange || !this.shadowRoot) {
       return;
     }
-    this.shadowRoot.querySelector('code-mirror').value = value;
+    this._editor.value = value;
   }
   /**
    * Called when the editor fires change event
@@ -220,75 +253,13 @@ class RawPayloadEditor extends
   _editorValueChanged(e) {
     e.stopPropagation();
     this.__editorValueChange = true;
-    this.set('value', e.detail.value);
+    this.value = e.detail.value;
     this.__editorValueChange = false;
-  }
-  /**
-   * Formats JSON data on paste.
-   * It only formats the input if no selection is applied, whole value
-   * is selcted or input is empty.
-   *
-   * @param {Event} e
-   */
-  _onPaste(e) {
-    if (this.contentType !== 'application/json') {
-      return;
-    }
-    let len;
-    if (this.value) {
-      len = this.value.length;
-    }
-    if (this._cancelPaste(len)) {
-      return;
-    }
-
-    let data = e.clipboardData.getData('text');
-    try {
-      data = JSON.parse(data);
-      data = JSON.stringify(data, null, 2);
-      e.preventDefault();
-      this.set('value', data);
-    } catch (e) {}
-  }
-  /**
-   * Tests if text formatting on paste is allowed
-   *
-   * @param {Number} inputSize Size of current value
-   * @return {Boolean} True to disallow altering the value on paste.
-   */
-  _cancelPaste(inputSize) {
-    if (!inputSize) {
-      return false;
-    }
-    const el = document.activeElement;
-    let start = 0;
-    let end = 0;
-    if (el) {
-      if (typeof el.selectionStart === 'number') {
-        start = el.selectionStart;
-      }
-      if (typeof el.selectionEnd === 'number') {
-        end = el.selectionEnd;
-      }
-    }
-    if (start === 0 && end === 0) {
-      const selection = window.getSelection();
-      if (selection.rangeCount === 0) {
-        return false;
-      }
-      const range = selection.getRangeAt(0);
-      start = range.startOffset;
-      end = range.endOffset;
-    }
-    if (start === 0 && end === inputSize) {
-      return false;
-    }
-    return true;
   }
 
   _setupLinter(ct) {
     /* global CodeMirror */
-    const editor = this.$.cm;
+    const editor = this._editor;
     if (this._computeIsJson(ct)) {
       editor.lint = CodeMirror.lint.json;
       editor.gutters = ['code-mirror-lint', 'CodeMirror-lint-markers'];
@@ -306,11 +277,10 @@ class RawPayloadEditor extends
       let value = this.value;
       value = JSON.parse(value);
       value = JSON.stringify(value, null, 2);
-      this.set('value', value);
+      this.value = value;
       this.refresh();
     } catch (e) {
-      this.$.invalidJsonToast.opened = true;
-      console.log(e);
+      this.shadowRoot.querySelector('#invalidJsonToast').opened = true;
     }
   }
   /**
@@ -321,11 +291,10 @@ class RawPayloadEditor extends
       let value = this.value;
       value = JSON.parse(value);
       value = JSON.stringify(value);
-      this.set('value', value);
+      this.value = value;
       this.refresh();
     } catch (e) {
-      this.$.invalidJsonToast.opened = true;
-      console.log(e);
+      this.shadowRoot.querySelector('#invalidJsonToast').opened = true;
     }
   }
 
@@ -340,7 +309,7 @@ class RawPayloadEditor extends
   encodeValue() {
     const value = this.encodeUrlEncoded(this.value);
     this.__internalChange = true;
-    this.set('value', value);
+    this.value = value;
     this.__internalChange = false;
   }
   /**
@@ -350,8 +319,8 @@ class RawPayloadEditor extends
   decodeValue() {
     const value = this.decodeUrlEncoded(this.value);
     this.__internalChange = true;
-    this.set('value', value);
+    this.value = value;
     this.__internalChange = false;
   }
 }
-window.customElements.define(RawPayloadEditor.is, RawPayloadEditor);
+window.customElements.define('raw-payload-editor', RawPayloadEditor);
