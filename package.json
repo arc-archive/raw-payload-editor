@@ -1,23 +1,22 @@
 {
-  "name": "@api-components/raw-payload-editor",
-  "version": "2.0.1",
-  "license": "Apache-2.0",
+  "name": "@advanced-rest-client/raw-payload-editor",
   "description": "A raw payload input editor based on CodeMirror",
-  "devDependencies": {
-    "@polymer/gen-typescript-declarations": "^1.6.1"
-  },
-  "private": false,
-  "main": "raw-payload-editor.html",
+  "version": "3.0.0",
+  "license": "Apache-2.0",
+  "main": "raw-payload-editor.js",
+  "keywords": [
+    "web-components",
+    "payload-editor",
+    "code-mirror"
+  ],
   "authors": [
     "Pawel Psztyc",
     "The Advanced REST Client authors"
   ],
-  "scripts": {
-    "lint": "polymer lint raw-payload-editor.html",
-    "test-sauce": "polymer test --plugin sauce --job-name \"raw-payload-editor:local-test\"",
-    "test": "polymer test --plugin local",
-    "update-types": "gen-typescript-declarations --deleteExisting --outDir ."
-  },
+  "contributors": [
+    "Pawel Psztyc",
+    "The Advanced REST client authors <arc@mulesoft.com>"
+  ],
   "repository": {
     "type": "git",
     "url": "git://github.com/advanced-rest-client/raw-payload-editor.git"
@@ -25,5 +24,57 @@
   "bugs": {
     "url": "https://github.com/advanced-rest-client/raw-payload-editor/issues",
     "email": "arc@mulesoft.com"
+  },
+  "dependencies": {
+    "@advanced-rest-client/arc-resizable-mixin": "^1.0.0",
+    "@advanced-rest-client/code-mirror": "^3.0.0",
+    "@advanced-rest-client/code-mirror-linter": "^3.0.0",
+    "@advanced-rest-client/events-target-mixin": "^3.0.0",
+    "@advanced-rest-client/payload-parser-mixin": "^3.0.0",
+    "@polymer/paper-button": "^3.0.0",
+    "@polymer/paper-toast": "^3.0.0",
+    "lit-element": "^2.2.1"
+  },
+  "devDependencies": {
+    "@advanced-rest-client/arc-demo-helper": "^1.0.7",
+    "@advanced-rest-client/eslint-config": "^1.0.6",
+    "@advanced-rest-client/prettier-config": "^0.1.0",
+    "@advanced-rest-client/testing-karma-sl": "^1.0.2",
+    "@advanced-rest-client/content-type-selector": "^3.0.0",
+    "@commitlint/cli": "^8.1.0",
+    "@commitlint/config-conventional": "^7.0.0",
+    "@open-wc/testing": "^2.2.1",
+    "@open-wc/testing-karma": "^3.1.5",
+    "@polymer/gen-typescript-declarations": "^1.6.2",
+    "@polymer/paper-checkbox": "^3.0.0",
+    "deepmerge": "^4.0.0",
+    "es-dev-server": "^1.8.3",
+    "husky": "^1.0.0",
+    "karma": "^4.2.0",
+    "lint-staged": "^8.0.0",
+    "sinon": "^7.3.2"
+  },
+  "scripts": {
+    "test": "karma start --coverage",
+    "update-types": "gen-typescript-declarations --deleteExisting --outDir .",
+    "start": "es-dev-server --app-index demo/index.html --node-resolve --open --watch",
+    "start:compatibility": "es-dev-server --app-index demo/index.html --compatibility all --node-resolve --open --watch",
+    "lint:eslint": "eslint --ext .js,.html .",
+    "format:eslint": "eslint --ext .js,.html . --fix",
+    "lint:prettier": "prettier \"**/*.js\" --list-different || (echo '↑↑ these files are not prettier formatted ↑↑' && exit 1)",
+    "format:prettier": "prettier \"**/*.js\" --write",
+    "lint": "npm run lint:eslint && npm run lint:prettier",
+    "format": "npm run format:eslint && npm run format:prettier",
+    "test:watch": "karma start --auto-watch=true --single-run=false",
+    "test:legacy": "karma start --legacy --coverage",
+    "test:legacy:watch": "karma start --legacy --auto-watch=true --single-run=false",
+    "test:sl": "karma start karma.sl.config.js --legacy --coverage",
+    "generate-model": "node demo/model.js"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
   }
 }

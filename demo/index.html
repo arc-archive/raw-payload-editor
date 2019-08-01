@@ -1,45 +1,33 @@
 <!doctype html>
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
 <html>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
   <title>raw-payload-editor demo</title>
-  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-  <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
-  <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-  <link rel="import" href="../../polymer/lib/elements/dom-bind.html">
-  <link rel="import" href="../../content-type-selector/content-type-selector.html">
-  <link rel="import" href="../raw-payload-editor.html">
-  <custom-style>
-    <style is="custom-style" include="demo-pages-shared-styles">
-    :root {
-      --arc-code-mirror-background-color: #f5f2f0;
+  <script src="../node_modules/web-animations-js/web-animations.min.js"></script>
 
-      --code-mirror-editor: {
-        background-color: #f5f2f0;
-        z-index: 0;
-        display: block;
-        height: 100px; /*auto;*/
-      }
-      --code-mirror-wrapper: {
-        display: block;
-      };
+  <style>
+    body.styled.dark {
+      --code-mirror-background-color: #37474F;
+      --code-mirror-string-color: #C3E88D;
+      --code-mirror-punctuation-color: #EEFFFF;
+      --code-mirror-atom-color: #F07178;
+      --code-mirror-number-color: #F78C6A;
+      --code-mirror-cursor-color: #009688;
+      --paper-listbox-background-color: #37474F;
     }
+
+    body.styled.dark output:before {
+      color: #fff;
+    }
+
     output {
       display: block;
       white-space: pre-wrap;
       margin-top: 40px;
-      @apply --layout-horizontal;
+      display: flex;
+      flex-direction: column;
     }
 
     output:before {
@@ -47,34 +35,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       margin-right: 8px;
       color: rgba(0,0,0,0.74);
     }
-    </style>
-  </custom-style>
-</head>
-<body unresolved>
-  <div class="vertical-section-container centered">
-    <h3>The `raw-payload-editor`</h3>
-    <demo-snippet>
-      <template>
-        <dom-bind>
-          <template is="dom-bind">
-            <content-type-selector content-type="{{ct}}"></content-type-selector>
-            <raw-payload-editor content-type="[[ct]]" value="{{payload}}"></raw-payload-editor>
-            <output>[[payload]]</output>
-          </template>
-        </dom-bind>
-      </template>
-    </demo-snippet>
-  </div>
+  </style>
+
+  <!--
+  With HTML imports this was relatively easy task to perform inside web component.
+  With module imports it's all get very messy with legacy scripts (using webpack or whatever).
+  This scripts cannot be loaded inside the the module as it wont be added to the window object.
+  CodeMirror uses `this` instead of `window` or `self` and do not exports any instance.
+  Therefore the CM scripts has to be loaded outside the componet.
+  -->
+  <script src="../node_modules/jsonlint/lib/jsonlint.js"></script>
+  <script src="../node_modules/codemirror/lib/codemirror.js"></script>
+  <script src="../node_modules/codemirror/addon/mode/loadmode.js"></script>
+  <script src="../node_modules/codemirror/mode/meta.js"></script>
+  <script src="../node_modules/codemirror/mode/javascript/javascript.js"></script>
+  <script src="../node_modules/codemirror/mode/xml/xml.js"></script>
+  <script src="../node_modules/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+  <script src="../node_modules/codemirror/addon/lint/lint.js"></script>
+  <script src="../node_modules/codemirror/addon/lint/json-lint.js"></script>
+  <!--
+  From the inside of the web component it is hard to determine where
+  scripts are actually located. This should be set if the page won't load all possible
+  scripts at run time. The component will download the "mode" from this location.
+  -->
   <script>
-  window.addEventListener('WebComponentsReady', function() {
-    document.body.dispatchEvent(new CustomEvent('content-type-changed', {
-      bubbles: true,
-      cancelable: true,
-      detail: {
-        value: 'application/json'
-      }
-    }));
-  });
+  /* global CodeMirror */
+  CodeMirror.modeURL = '../node_modules/codemirror/mode/%N/%N.js';
   </script>
+  <!-- And finally linter popup -->
+  <link rel="stylesheet" href="../node_modules/codemirror/addon/lint/lint.css" />
+</head>
+<body class="styled">
+  <div id="demo"></div>
+
+  <script type="module" src="./index.js"></script>
 </body>
 </html>
