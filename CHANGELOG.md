@@ -169,3 +169,7 @@
 
 
 
+# [3.0.0](https://github.com/advanced-rest-client/raw-payload-editor/compare/2.0.0-preview...3.0.0) (2019-08-01)
+
+
+
