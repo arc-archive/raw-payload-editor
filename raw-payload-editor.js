@@ -181,6 +181,9 @@ class RawPayloadEditor extends ArcResizableMixin(PayloadParserMixin(EventsTarget
     if (this.contentType) {
       this._onContentTypeChanged(this.contentType);
     }
+    if (this.value) {
+      this._valueChanged(this.value)
+    }
   }
 
   /**
@@ -240,10 +243,11 @@ class RawPayloadEditor extends ArcResizableMixin(PayloadParserMixin(EventsTarget
    * @param {String} value
    */
   _valueChanged(value) {
-    if (this.__editorValueChange || !this.shadowRoot) {
+    const editor = this._editor;
+    if (this.__editorValueChange || !editor) {
       return;
     }
-    this._editor.value = value;
+    editor.value = value;
   }
   /**
    * Called when the editor fires change event
