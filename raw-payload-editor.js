@@ -182,7 +182,7 @@ class RawPayloadEditor extends ArcResizableMixin(PayloadParserMixin(EventsTarget
       this._onContentTypeChanged(this.contentType);
     }
     if (this.value) {
-      this._valueChanged(this.value)
+      this._valueChanged(this.value);
     }
   }
 
