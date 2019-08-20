@@ -16,7 +16,7 @@ import { ArcResizableMixin } from '@advanced-rest-client/arc-resizable-mixin/arc
 import { EventsTargetMixin } from '@advanced-rest-client/events-target-mixin/events-target-mixin.js';
 import { PayloadParserMixin } from '@advanced-rest-client/payload-parser-mixin/payload-parser-mixin.js';
 import '@polymer/paper-toast/paper-toast.js';
-import '@polymer/paper-button/paper-button.js';
+import '@anypoint-web-components/anypoint-button/anypoint-button.js';
 import '@advanced-rest-client/code-mirror/code-mirror.js';
 import '@advanced-rest-client/code-mirror-linter/code-mirror-linter.js';
 import linterStyles from '@advanced-rest-client/code-mirror-linter/lint-style.js';
@@ -34,16 +34,7 @@ import linterStyles from '@advanced-rest-client/code-mirror-linter/lint-style.js
  * <raw-payload-editor content-type="application/json"></raw-payload-editor>
  * ```
  *
- * ### Styling
- * `<raw-payload-editor>` provides the following custom properties and mixins for styling:
- *
- * Custom property | Description | Default
- * ----------------|-------------|----------
- * `--raw-payload-editor` | Mixin applied to the element | `{}`
- * `--raw-payload-editor-encode-buttons` | Mixin applied to encode / decode buttons container | `{}`
- *
  * @customElement
- * @polymer
  * @demo demo/index.html
  * @memberof UiElements
  * @polymerBehavior Polymer.IronResizableBehavior
@@ -58,7 +49,7 @@ class RawPayloadEditor extends ArcResizableMixin(PayloadParserMixin(EventsTarget
         display: block;
       }
 
-      .action-buttons {
+      .action-buttons > * {
         margin: 8px 0;
       }
 
@@ -71,18 +62,33 @@ class RawPayloadEditor extends ArcResizableMixin(PayloadParserMixin(EventsTarget
   render() {
     const { _encodeEnabled, _isJson } = this;
     return html`
-    ${_encodeEnabled ? html`<div class="action-buttons" data-type="form">
-      <paper-button @click="${this.encodeValue}"
-        title="Encodes payload to x-www-form-urlencoded data">Encode payload</paper-button>
-      <paper-button @click="${this.decodeValue}"
-        title="Decodes payload to human readable form">Decode payload</paper-button>
-    </div>` : undefined}
-    ${_isJson ? html`<div class="action-buttons" data-type="json">
-      <paper-button @click="${this.formatValue}" data-action="format-json"
-        title="Formats JSON input.">Format JSON</paper-button>
-      <paper-button @click="${this.minifyValue}" data-action="minify-json"
-        title="Removed whitespaces from the input">Minify JSON</paper-button>
-    </div>` : undefined}
+    <div class="action-buttons">
+      ${_encodeEnabled ? html`
+        <anypoint-button
+          data-action="encode"
+          @click="${this.encodeValue}"
+          emphasis="medium"
+          title="Encodes payload to x-www-form-urlencoded data">Encode payload</anypoint-button>
+        <anypoint-button
+          data-action="decode"
+          @click="${this.decodeValue}"
+          emphasis="medium"
+          title="Decodes payload to human readable form">Decode payload</anypoint-button>
+      ` : undefined}
+      ${_isJson ? html`
+        <anypoint-button
+          data-action="format-json"
+          emphasis="medium"
+          @click="${this.formatValue}"
+          title="Formats JSON input.">Format JSON</anypoint-button>
+        <anypoint-button
+          data-action="minify-json"
+          @click="${this.minifyValue}"
+          emphasis="medium"
+          title="Removed whitespaces from the input">Minify JSON</anypoint-button>
+      ` : undefined}
+      <slot name="content-action"></slot>
+    </div>
     <code-mirror
       mode="application/json"
       @value-changed="${this._editorValueChanged}"

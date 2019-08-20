@@ -83,8 +83,8 @@ describe('<raw-payload-editor>', function() {
     });
 
     it('Action controls are rendered', function() {
-      const container = element.shadowRoot.querySelector('.action-buttons[data-type="form"]');
-      assert.ok(container);
+      const nodes = element.shadowRoot.querySelectorAll('[data-action="encode"],[data-action="decode"]');
+      assert.lengthOf(nodes, 2);
     });
 
     it('Encodes parameters', function() {
@@ -109,8 +109,8 @@ describe('<raw-payload-editor>', function() {
     });
 
     it('Formatting controls are rendered', function() {
-      const container = element.shadowRoot.querySelector('.action-buttons[data-type="json"]');
-      assert.ok(container);
+      const nodes = element.shadowRoot.querySelectorAll('[data-action="format-json"],[data-action="minify-json"]');
+      assert.lengthOf(nodes, 2);
     });
 
     it('Formats JSON', async () => {
