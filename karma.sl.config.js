@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-const merge = require('webpack-merge');
+const merge = require('deepmerge');
 const slSettings = require('@advanced-rest-client/testing-karma-sl/sl-settings.js');
 const createBaseConfig = require('./karma.conf.js');
 
@@ -12,7 +12,7 @@ module.exports = (config) => {
     'SL_Firefox',
     'SL_Firefox-1',
     'SL_Safari',
-    'SL_EDGE'
+    // 'SL_EDGE'
   ];
   if (process.env.TRAVIS) {
     const buildLabel = 'TRAVIS #' + process.env.TRAVIS_BUILD_NUMBER + ' (' + process.env.TRAVIS_BUILD_ID + ')';
