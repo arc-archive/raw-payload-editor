@@ -270,7 +270,7 @@ class RawPayloadEditor extends ArcResizableMixin(PayloadParserMixin(EventsTarget
   _setupLinter(ct) {
     /* global CodeMirror */
     const editor = this._editor;
-    if (this._computeIsJson(ct)) {
+    if (this._computeIsJson(ct) && CodeMirror.lint) {
       editor.lint = CodeMirror.lint.json;
       editor.gutters = ['code-mirror-lint', 'CodeMirror-lint-markers'];
     } else {
