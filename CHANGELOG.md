@@ -182,3 +182,12 @@
 
 
 
+## [3.0.3](https://github.com/advanced-rest-client/raw-payload-editor/compare/2.0.0-preview...3.0.3) (2019-08-20)
+
+
+### Bug Fixes
+
+* fixing value setting during initialization ([9439ffc](https://github.com/advanced-rest-client/raw-payload-editor/commit/9439ffc))
+
+
+
