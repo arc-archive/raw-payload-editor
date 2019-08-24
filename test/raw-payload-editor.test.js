@@ -18,6 +18,12 @@ describe('<raw-payload-editor>', function() {
     `));
   }
 
+  async function lineNumbersFixture() {
+    return (await fixture(`
+      <raw-payload-editor lineNumbers></raw-payload-editor>
+    `));
+  }
+
   function fire(name, detail, node) {
     const event = new CustomEvent(name, {
       bubbles: true,
@@ -213,6 +219,13 @@ describe('<raw-payload-editor>', function() {
     });
   });
 
+  describe('lineNumbers proeprty', () => {
+    it('passes lineNumbers property to CM', async () => {
+      const element = await lineNumbersFixture();
+      assert.isTrue(element._editor.lineNumbers);
+    });
+  });
+
   describe('a11y', () => {
     it('is accessible in normal state', async () => {
       const element = await basicFixture();
@@ -225,6 +238,11 @@ describe('<raw-payload-editor>', function() {
     });
 
     it('is accessible for application/json', async () => {
+      const element = await jsonFixture();
+      await assert.isAccessible(element);
+    });
+
+    it('is accessible with line numbers', async () => {
       const element = await jsonFixture();
       await assert.isAccessible(element);
     });

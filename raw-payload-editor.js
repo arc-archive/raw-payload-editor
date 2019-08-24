@@ -60,7 +60,7 @@ class RawPayloadEditor extends ArcResizableMixin(PayloadParserMixin(EventsTarget
   }
 
   render() {
-    const { _encodeEnabled, _isJson } = this;
+    const { _encodeEnabled, _isJson, lineNumbers } = this;
     return html`
     <div class="action-buttons">
       ${_encodeEnabled ? html`
@@ -92,7 +92,8 @@ class RawPayloadEditor extends ArcResizableMixin(PayloadParserMixin(EventsTarget
     <code-mirror
       mode="application/json"
       @value-changed="${this._editorValueChanged}"
-      gutters='["CodeMirror-lint-markers"]'></code-mirror>
+      gutters='["CodeMirror-lint-markers"]'
+      .lineNumbers="${lineNumbers}"></code-mirror>
     <paper-toast id="invalidJsonToast">JSON value is invalid. Cannot parse value.</paper-toast>`;
   }
 
@@ -102,6 +103,11 @@ class RawPayloadEditor extends ArcResizableMixin(PayloadParserMixin(EventsTarget
        * Raw payload value
        */
       value: { type: String },
+      /**
+       * Renders line number when set.
+       * @type {Object}
+       */
+      lineNumbers: { type: Boolean },
       /**
        * Content-Type header value. Determines current code mirror mode.
        */
