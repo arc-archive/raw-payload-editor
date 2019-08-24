@@ -6,9 +6,6 @@ module.exports = (config) => {
   config.set(
     merge(createDefaultConfig(config), {
       files: [
-        {
-          pattern: require.resolve('chai/chai.js')
-        },
         // runs all files ending with .test in the test folder,
         // can be overwritten by passing a --grep flag. examples:
         //
