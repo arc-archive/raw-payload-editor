@@ -60,7 +60,7 @@ class RawPayloadEditor extends ArcResizableMixin(PayloadParserMixin(EventsTarget
   }
 
   render() {
-    const { _encodeEnabled, _isJson, lineNumbers } = this;
+    const { _encodeEnabled, _isJson, lineNumbers, compatibility } = this;
     return html`
     <div class="action-buttons">
       ${_encodeEnabled ? html`
@@ -68,24 +68,30 @@ class RawPayloadEditor extends ArcResizableMixin(PayloadParserMixin(EventsTarget
           data-action="encode"
           @click="${this.encodeValue}"
           emphasis="medium"
-          title="Encodes payload to x-www-form-urlencoded data">Encode payload</anypoint-button>
+          title="Encodes payload to x-www-form-urlencoded data"
+          ?compatibility="${compatibility}"
+        >Encode payload</anypoint-button>
         <anypoint-button
           data-action="decode"
           @click="${this.decodeValue}"
           emphasis="medium"
-          title="Decodes payload to human readable form">Decode payload</anypoint-button>
+          title="Decodes payload to human readable form"
+          ?compatibility="${compatibility}"
+        >Decode payload</anypoint-button>
       ` : undefined}
       ${_isJson ? html`
         <anypoint-button
           data-action="format-json"
           emphasis="medium"
           @click="${this.formatValue}"
-          title="Formats JSON input.">Format JSON</anypoint-button>
+          title="Formats JSON input."
+        ?compatibility="${compatibility}">Format JSON</anypoint-button>
         <anypoint-button
           data-action="minify-json"
           @click="${this.minifyValue}"
           emphasis="medium"
-          title="Removed whitespaces from the input">Minify JSON</anypoint-button>
+          title="Removed whitespaces from the input"
+        ?compatibility="${compatibility}">Minify JSON</anypoint-button>
       ` : undefined}
       <slot name="content-action"></slot>
     </div>
@@ -93,7 +99,8 @@ class RawPayloadEditor extends ArcResizableMixin(PayloadParserMixin(EventsTarget
       mode="application/json"
       @value-changed="${this._editorValueChanged}"
       gutters='["CodeMirror-lint-markers"]'
-      .lineNumbers="${lineNumbers}"></code-mirror>
+      ?lineNumbers="${lineNumbers}"
+    ></code-mirror>
     <paper-toast id="invalidJsonToast">JSON value is invalid. Cannot parse value.</paper-toast>`;
   }
 
@@ -108,6 +115,10 @@ class RawPayloadEditor extends ArcResizableMixin(PayloadParserMixin(EventsTarget
        * @type {Object}
        */
       lineNumbers: { type: Boolean },
+      /**
+       * Enables compatibility mode with Anypoint platform.
+       */
+      compatibility: { type: Boolean },
       /**
        * Content-Type header value. Determines current code mirror mode.
        */
