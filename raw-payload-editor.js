@@ -55,6 +55,11 @@ class RawPayloadEditor extends ArcResizableMixin(PayloadParserMixin(EventsTarget
 
       *[hidden] {
         display: none !important;
+      }
+
+      code-mirror {
+        height: auto;
+        max-height: 300px;
       }`
     ];
   }
