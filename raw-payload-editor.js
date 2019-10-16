@@ -60,7 +60,13 @@ class RawPayloadEditor extends ArcResizableMixin(PayloadParserMixin(EventsTarget
       code-mirror {
         height: auto;
         max-height: 300px;
-      }`
+      }
+
+      anypoint-button,
+      .action-buttons ::slotted(anypoint-button) {
+        white-space: nowrap;
+      }
+      `
     ];
   }
 

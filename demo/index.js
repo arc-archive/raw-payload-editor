@@ -3,6 +3,7 @@ import { ArcDemoPage } from '@advanced-rest-client/arc-demo-helper/ArcDemoPage.j
 import '@advanced-rest-client/content-type-selector/content-type-selector.js';
 import '@anypoint-web-components/anypoint-styles/colors.js';
 import '@advanced-rest-client/arc-demo-helper/arc-interactive-demo.js';
+import '@anypoint-web-components/anypoint-checkbox/anypoint-checkbox.js';
 import '../raw-payload-editor.js';
 
 class ComponentDemo extends ArcDemoPage {
@@ -11,7 +12,8 @@ class ComponentDemo extends ArcDemoPage {
     this.initObservableProperties([
       'compatibility',
       'contentType',
-      'payload'
+      'payload',
+      'withActions'
     ]);
     this.demoStates = ['Material design', 'Anypoint'];
     this._componentName = 'raw-payload-editor';
@@ -45,7 +47,8 @@ class ComponentDemo extends ArcDemoPage {
       darkThemeActive,
       compatibility,
       contentType,
-      payload
+      payload,
+      withActions
     } = this;
     return html`
       <section class="documentation-section">
@@ -70,8 +73,28 @@ class ComponentDemo extends ArcDemoPage {
               .contenttype="${contentType}"
               @value-changed="${this._valueHandler}"
               lineNumbers
-            ></raw-payload-editor>
+            >
+            ${withActions ? html`
+              <anypoint-button
+                slot="content-action"
+                ?compatibility="${compatibility}"
+              >Add parameter<anypoint-button>
+              <anypoint-button
+                slot="content-action"
+                ?compatibility="${compatibility}"
+              >Copy<anypoint-button>
+            ` : ''}
+            </raw-payload-editor>
           </div>
+
+        <label slot="options" id="mainOptionsLabel">Options</label>
+          <anypoint-checkbox
+            aria-describedby="mainOptionsLabel"
+            slot="options"
+            name="withActions"
+            @change="${this._toggleMainOption}"
+            >Content actions</anypoint-checkbox
+          >
         </arc-interactive-demo>
 
         <output>${payload}</output>
