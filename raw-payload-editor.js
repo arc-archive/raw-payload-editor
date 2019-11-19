@@ -42,7 +42,7 @@ import linterStyles from '@advanced-rest-client/code-mirror-linter/lint-style.js
  * @appliesMixin PayloadParserMixin
  */
 class RawPayloadEditor extends ArcResizableMixin(PayloadParserMixin(EventsTargetMixin(LitElement))) {
-  static get styles() {
+  get styles() {
     return [
       linterStyles,
       css`:host {
@@ -72,7 +72,7 @@ class RawPayloadEditor extends ArcResizableMixin(PayloadParserMixin(EventsTarget
 
   render() {
     const { _encodeEnabled, _isJson, lineNumbers, compatibility } = this;
-    return html`
+    return html`<style>${this.styles}</style>
     <div class="action-buttons">
       ${_encodeEnabled ? html`
         <anypoint-button
