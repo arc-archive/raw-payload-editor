@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+/* eslint-disable class-methods-use-this */
 /**
 @license
 Copyright 2019 The Advanced REST client authors <arc@mulesoft.com>
@@ -12,9 +14,9 @@ License for the specific language governing permissions and limitations under
 the License.
 */
 import { LitElement, html, css } from 'lit-element';
-import { ArcResizableMixin } from '@advanced-rest-client/arc-resizable-mixin/arc-resizable-mixin.js';
-import { EventsTargetMixin } from '@advanced-rest-client/events-target-mixin/events-target-mixin.js';
-import { PayloadParserMixin } from '@advanced-rest-client/payload-parser-mixin/payload-parser-mixin.js';
+import { ArcResizableMixin } from '@advanced-rest-client/arc-resizable-mixin';
+import { EventsTargetMixin } from '@advanced-rest-client/events-target-mixin';
+import { PayloadParserMixin } from '@advanced-rest-client/payload-parser-mixin';
 import '@polymer/paper-toast/paper-toast.js';
 import '@anypoint-web-components/anypoint-button/anypoint-button.js';
 import '@advanced-rest-client/code-mirror/code-mirror.js';
@@ -33,13 +35,6 @@ import linterStyles from '@advanced-rest-client/code-mirror-linter/lint-style.js
  * ```
  * <raw-payload-editor content-type="application/json"></raw-payload-editor>
  * ```
- *
- * @customElement
- * @demo demo/index.html
- * @memberof UiElements
- * @polymerBehavior Polymer.IronResizableBehavior
- * @appliesMixin EventsTargetMixin
- * @appliesMixin PayloadParserMixin
  */
 class RawPayloadEditor extends ArcResizableMixin(PayloadParserMixin(EventsTargetMixin(LitElement))) {
   get styles() {
@@ -72,6 +67,7 @@ class RawPayloadEditor extends ArcResizableMixin(PayloadParserMixin(EventsTarget
 
   render() {
     const { _encodeEnabled, _isJson, lineNumbers, compatibility } = this;
+    const gutters = ['CodeMirror-lint-markers'];
     return html`<style>${this.styles}</style>
     <div class="action-buttons">
       ${_encodeEnabled ? html`
@@ -109,7 +105,7 @@ class RawPayloadEditor extends ArcResizableMixin(PayloadParserMixin(EventsTarget
     <code-mirror
       mode="application/json"
       @value-changed="${this._editorValueChanged}"
-      gutters='["CodeMirror-lint-markers"]'
+      .gutters=${gutters}
       ?lineNumbers="${lineNumbers}"
     ></code-mirror>
     <paper-toast id="invalidJsonToast">JSON value is invalid. Cannot parse value.</paper-toast>`;
@@ -270,6 +266,7 @@ class RawPayloadEditor extends ArcResizableMixin(PayloadParserMixin(EventsTarget
   _contentTypeHandler(e) {
     this.contentType = e.detail.value;
   }
+
   /**
    * Handler for value change.
    * If the element is opened then it will fire change event.
@@ -283,6 +280,7 @@ class RawPayloadEditor extends ArcResizableMixin(PayloadParserMixin(EventsTarget
     }
     editor.value = value;
   }
+
   /**
    * Called when the editor fires change event
    *
@@ -307,12 +305,13 @@ class RawPayloadEditor extends ArcResizableMixin(PayloadParserMixin(EventsTarget
     }
     editor.refresh();
   }
+
   /**
    * Formats current value as it is a JSON object.
    */
   formatValue() {
     try {
-      let value = this.value;
+      let {value} = this;
       value = JSON.parse(value);
       value = JSON.stringify(value, null, 2);
       this.value = value;
@@ -321,12 +320,13 @@ class RawPayloadEditor extends ArcResizableMixin(PayloadParserMixin(EventsTarget
       this.shadowRoot.querySelector('#invalidJsonToast').opened = true;
     }
   }
+
   /**
    * Minifies JSON value by removing whitespaces.
    */
   minifyValue() {
     try {
-      let value = this.value;
+      let {value} = this;
       value = JSON.parse(value);
       value = JSON.stringify(value);
       this.value = value;
@@ -350,6 +350,7 @@ class RawPayloadEditor extends ArcResizableMixin(PayloadParserMixin(EventsTarget
     this.value = value;
     this.__internalChange = false;
   }
+
   /**
    * URL decodes payload value and resets the same value property.
    * This should be used only for payloads with x-www-form-urlencoded content-type.
