@@ -5,11 +5,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
   <title>raw-payload-editor demo</title>
-  <script src="../node_modules/web-animations-js/web-animations.min.js"></script>
 
   <style>
     body.styled {
-      --anypoiont-dropdown-shaddow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+      --anypoint-dropdown-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
     }
 
     body.styled.dark {
@@ -46,7 +45,7 @@
   With module imports it's all get very messy with legacy scripts (using webpack or whatever).
   This scripts cannot be loaded inside the the module as it wont be added to the window object.
   CodeMirror uses `this` instead of `window` or `self` and do not exports any instance.
-  Therefore the CM scripts has to be loaded outside the componet.
+  Therefore the CM scripts has to be loaded outside the component.
   -->
   <script src="../node_modules/jsonlint/lib/jsonlint.js"></script>
   <script src="../node_modules/codemirror/lib/codemirror.js"></script>

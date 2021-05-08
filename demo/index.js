@@ -1,26 +1,23 @@
 import { html } from 'lit-html';
-import { ArcDemoPage } from '@advanced-rest-client/arc-demo-helper/ArcDemoPage.js';
+import { DemoPage } from '@advanced-rest-client/arc-demo-helper';
 import '@advanced-rest-client/content-type-selector/content-type-selector.js';
 import '@anypoint-web-components/anypoint-styles/colors.js';
 import '@advanced-rest-client/arc-demo-helper/arc-interactive-demo.js';
 import '@anypoint-web-components/anypoint-checkbox/anypoint-checkbox.js';
 import '../raw-payload-editor.js';
 
-class ComponentDemo extends ArcDemoPage {
+class ComponentDemo extends DemoPage {
   constructor() {
     super();
     this.initObservableProperties([
-      'compatibility',
       'contentType',
       'payload',
       'withActions'
     ]);
     this.demoStates = ['Material design', 'Anypoint'];
-    this._componentName = 'raw-payload-editor';
+    this.componentName = 'raw-payload-editor';
     this._ctHandler = this._ctHandler.bind(this);
     this._valueHandler = this._valueHandler.bind(this);
-    this._demoStateHandler = this._demoStateHandler.bind(this);
-    this._toggleMainOption = this._toggleMainOption.bind(this);
   }
 
   _ctHandler(e) {
@@ -29,16 +26,6 @@ class ComponentDemo extends ArcDemoPage {
 
   _valueHandler(e) {
     this.payload = e.detail.value;
-  }
-
-  _toggleMainOption(e) {
-    const { name, checked } = e.target;
-    this[name] = checked;
-  }
-
-  _demoStateHandler(e) {
-    const state = e.detail.value;
-    this.compatibility = state === 1;
   }
 
   _demoTemplate() {
@@ -60,7 +47,7 @@ class ComponentDemo extends ArcDemoPage {
 
         <arc-interactive-demo
           .states="${demoStates}"
-          @state-chanegd="${this._demoStateHandler}"
+          @state-changed="${this._demoStateHandler}"
           ?dark="${darkThemeActive}"
         >
           <div class="demo-content" slot="content">
@@ -78,11 +65,11 @@ class ComponentDemo extends ArcDemoPage {
               <anypoint-button
                 slot="content-action"
                 ?compatibility="${compatibility}"
-              >Add parameter<anypoint-button>
+              >Add parameter</anypoint-button>
               <anypoint-button
                 slot="content-action"
                 ?compatibility="${compatibility}"
-              >Copy<anypoint-button>
+              >Copy</anypoint-button>
             ` : ''}
             </raw-payload-editor>
           </div>

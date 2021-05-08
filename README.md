@@ -8,7 +8,7 @@
 
 An element with CodeMirror editor to allow the user to enter HTTP message body.
 
-
+> This component is no longer developed. Please, do not use it.
 
 ## Breaking Changes in v3
 
