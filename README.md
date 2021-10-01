@@ -1,10 +1,8 @@
-[![Published on NPM](https://img.shields.io/npm/v/@advanced-rest-client/raw-payload-editor.svg)](https://www.npmjs.com/package/@advanced-rest-client/raw-payload-editor)
+# DEPRECATED
 
-[![Build Status](https://travis-ci.org/advanced-rest-client/raw-payload-editor.svg?branch=stage)](https://travis-ci.org/advanced-rest-client/raw-payload-editor)  
+This component is deprecated. The code base has been moved to [body-editor](https://github.com/advanced-rest-client/body-editor) module.
 
-[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/advanced-rest-client/raw-payload-editor)
-
-## &lt;raw-payload-editor&gt;
+-----
 
 An element with CodeMirror editor to allow the user to enter HTTP message body.
 
